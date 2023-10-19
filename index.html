@@ -1,0 +1,22 @@
+<input id="salita" value="tao" />
+<input id="baybay" value="ta o" />
+<div id="baybayin"></div>
+
+<script type="module" async>
+  import { baybayin } from "./baybay.mjs";
+
+  const patlangSalita = document.getElementById("salita");
+  const patlangBaybay = document.getElementById("baybay");
+
+  patlangSalita.addEventListener("input", () => {
+    const baybay = baybayin(patlangSalita.value, "tl");
+    console.log(baybay);
+    patlangBaybay.value = baybay.join(" ");
+  });
+</script>
+
+<script nomodule>
+  document.write(
+    "Please upgrade your browser. Your browser does not support new features required by this webapp. :("
+  );
+</script>

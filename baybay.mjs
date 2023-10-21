@@ -34,6 +34,9 @@ export function baybayin(parirala, paano = {}) {
       letra = letra.toLowerCase();
       const hulingTitik = itongTitik && itongTitik.slice(-1);
       if (patinig(letra)) {
+        if (letra === "e") letra = "i";
+        if (letra === "o") letra = "u";
+
         if (itongTitik && patinig(hulingTitik)) {
           mgaTitik.push(itongTitik);
           itongTitik = "";
@@ -46,9 +49,6 @@ export function baybayin(parirala, paano = {}) {
             }
           }
         }
-
-        if (letra === "e") letra = "i";
-        if (letra === "o") letra = "u";
 
         itongTitik += letra;
       } else if (katinigBakada(letra)) {

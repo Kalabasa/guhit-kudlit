@@ -1,0 +1,10 @@
+@font-face {
+  font-family: "Cubao Regular";
+  src: url("./cubao_regular.otf") format("opentype");
+  font-weight: normal;
+}
+@font-face {
+  font-family: "Cubao Wide";
+  src: url("./cubao_wide.otf") format("opentype");
+  font-weight: normal;
+}

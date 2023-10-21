@@ -1,18 +1,136 @@
-<input id="salita" value="tao" />
-<input id="baybay" value="ta o" />
-<div id="baybayin"></div>
+<meta charset="utf-8" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Karla&family=Noto+Sans+Tagalog&display=swap"
+  rel="stylesheet"
+/>
+<link href="./font/font.css" rel="stylesheet" />
+
+<style>
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+  }
+  body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: "Karla", sans-serif;
+    background: #fcfaf9;
+  }
+  header {
+    margin: 0 0 4em;
+    padding: 1em;
+  }
+  header > h1 {
+    margin: 0;
+    font-family: "Cubao Regular", sans-serif;
+    font-size: 1.2em;
+    font-weight: normal;
+    text-align: center;
+  }
+  .pamagatNaman {
+    font-family: "Cubao Wide", sans-serif;
+    font-size: 0.95em;
+  }
+  header > h2 {
+    margin: 1em 0 0;
+    font-size: 1em;
+    font-weight: normal;
+  }
+  .tagalog,
+  .baybayin {
+    width: 100%;
+    max-width: 30em;
+  }
+  label {
+    display: block;
+    font-size: 0.8em;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  input,
+  #pagkakabasa,
+  #baybayin {
+    margin: 0.25em 0 1em;
+    padding: 0;
+    width: 100%;
+    min-height: 2em;
+    box-sizing: border-box;
+    font-size: 1.5em;
+  }
+  #pagkakabasa,
+  #baybayin {
+    display: flex;
+    align-items: center;
+  }
+  input {
+    font-family: inherit;
+    border: none;
+    background: none;
+    border-bottom: solid 1px currentColor;
+  }
+  #pagkakabasa:empty::after {
+    content: attr(data-placeholder);
+  }
+  #baybayin {
+    font-family: "Noto Sans Tagalog", system-ui;
+    font-size: 2.2em;
+  }
+  #baybayin:empty::after {
+    content: attr(data-placeholder);
+  }
+</style>
+
+<header>
+  <h1>
+    <span class="pamagatPasulat">Pasulat</span><br />
+    <span class="pamagatNaman">Naman</span>
+  </h1>
+  <h2 data-salin="pakilala">Baybayin transliterator & calligraphy generator</h2>
+</header>
+
+<div class="tagalog">
+  <label for="salita" data-salin="tagalogNaSalita">Tagalog word</label>
+  <input id="salita" placeholder="salita" />
+</div>
+
+<div class="baybayin">
+  <div>
+    <label for="pagkakabasa" data-salin="pagkakabasa">Interpretation</label>
+    <div id="pagkakabasa" data-placeholder="sa · li · ta"></div>
+  </div>
+  <div>
+    <label for="baybayin">Baybayin</label>
+    <div id="baybayin" data-placeholder="ᜐᜎᜒᜆ"></div>
+  </div>
+</div>
+
+<div class="kaligrapiya">K</div>
 
 <script type="module" async>
   import { baybayin } from "./baybay.mjs";
+  import { gawingUnicode } from "./unicode.mjs";
+  import { isalinAngPahina } from "./salin.mjs";
 
-  const patlangSalita = document.getElementById("salita");
-  const patlangBaybay = document.getElementById("baybay");
+  const patlangNgSalita = document.getElementById("salita");
+  const resultangPagkakabasa = document.getElementById("pagkakabasa");
+  const resultangBaybayin = document.getElementById("baybayin");
 
-  patlangSalita.addEventListener("input", () => {
-    const baybay = baybayin(patlangSalita.value, "tl");
-    console.log(baybay);
-    patlangBaybay.value = baybay.join(" ");
-  });
+  patlangNgSalita.addEventListener("input", andar);
+
+  function andar() {
+    const baybay = baybayin(patlangNgSalita.value, "tl");
+    resultangPagkakabasa.textContent = baybay.join(" · ");
+    resultangBaybayin.textContent = gawingUnicode(baybay);
+  }
+
+  isalinAngPahina();
+  andar();
 </script>
 
 <script nomodule>

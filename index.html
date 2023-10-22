@@ -20,21 +20,32 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    min-height: 100%;
     font-family: "Karla", sans-serif;
     background: #f8f4f2;
     color: #3f2e26;
   }
   header {
-    margin: 0 0 4em;
+    display: grid;
+    width: 100%;
+    box-sizing: border-box;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto auto;
+    grid-template-areas:
+      "_ pamagat wikaan"
+      "pakilala pakilala pakilala";
+    margin: 0 0 2em;
     padding: 1em;
     text-align: center;
   }
   header > h1 {
-    display: inline-block;
+    grid-area: pamagat;
+    justify-self: center;
+    align-self: start;
     margin: 0;
     padding: 0.2em;
     font-family: "Cubao Regular", sans-serif;
-    font-size: 1.2em;
+    font-size: 1.6em;
     line-height: 0.7em;
     font-weight: normal;
     background: #000;
@@ -43,14 +54,37 @@
     font-family: "Cubao Wide", sans-serif;
     font-size: 0.84em;
     color: #c2ff19;
+    text-transform: uppercase;
   }
   .pamagatIkalawangLinya {
     color: #ff735a;
   }
   header > h2 {
+    grid-area: pakilala;
     margin: 1em 0 0;
     font-size: 1em;
     font-weight: normal;
+  }
+  .wikaan {
+    grid-area: wikaan;
+    justify-self: end;
+  }
+  .wikaan a {
+    color: #d27c00;
+  }
+  @media (max-width: 600px) {
+    header {
+      grid-template-areas:
+        "pamagat wikaan wikaan"
+        "pakilala pakilala pakilala";
+    }
+    header > h1 {
+      justify-self: start;
+      font-size: 1.2em;
+    }
+    header > h2 {
+      text-align: start;
+    }
   }
   form {
     position: relative;
@@ -180,6 +214,7 @@
     transform: scale(1);
   }
   .kaligrapiya {
+    flex: 1 0 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -205,11 +240,15 @@
     <span class="pamagatIkalawangLinya">baybay</span>
   </h1>
   <h2 data-salin="pakilala">Baybayin transliterator & calligraphy generator</h2>
+  <div class="wikaan">
+    <a href="?en">English</a> |
+    <a href="?tl">Tagalog</a>
+  </div>
 </header>
 
 <form id="sagutan" action="#">
   <div class="tagalog">
-    <label for="salita" data-salin="tagalogNaSalita">Tagalog word</label>
+    <label for="salita" data-salin="tagalogNaSalita">Tagalog word</label>⏷
     <input id="salita" placeholder="salita" autofocus />
   </div>
 
@@ -249,7 +288,7 @@
   sagutan.addEventListener("submit", isulatAngKaligrapiya);
 
   function isalinSaBaybayin() {
-    const baybay = baybayin(patlangNgSalita.value, "tl");
+    const baybay = baybayin(patlangNgSalita.value);
     pindutanParaLikhain.disabled = !patlangNgSalita.value || !baybay;
     resultangPagkakabasa.textContent = baybay.join(" · ");
     resultangBaybayin.textContent = gawingUnicode(baybay);

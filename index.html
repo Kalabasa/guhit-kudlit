@@ -1,4 +1,5 @@
 <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -20,32 +21,52 @@
     flex-direction: column;
     align-items: center;
     font-family: "Karla", sans-serif;
-    background: #fcfaf9;
+    background: #f8f4f2;
+    color: #3f2e26;
   }
   header {
     margin: 0 0 4em;
     padding: 1em;
-  }
-  header > h1 {
-    margin: 0;
-    font-family: "Cubao Regular", sans-serif;
-    font-size: 1.2em;
-    font-weight: normal;
     text-align: center;
   }
-  .pamagatNaman {
+  header > h1 {
+    display: inline-block;
+    margin: 0;
+    padding: 0.2em;
+    font-family: "Cubao Regular", sans-serif;
+    font-size: 1.2em;
+    line-height: 0.7em;
+    font-weight: normal;
+    background: #000;
+  }
+  .pamagatUnangLinya {
     font-family: "Cubao Wide", sans-serif;
-    font-size: 0.95em;
+    font-size: 0.84em;
+    color: #c2ff19;
+  }
+  .pamagatIkalawangLinya {
+    color: #ff735a;
   }
   header > h2 {
     margin: 1em 0 0;
     font-size: 1em;
     font-weight: normal;
   }
+  form {
+    position: relative;
+    margin: 0;
+    padding: 0 0 1em;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
   .tagalog,
   .baybayin {
     width: 100%;
     max-width: 30em;
+    padding: 0 1em;
+    box-sizing: border-box;
   }
   label {
     display: block;
@@ -72,65 +93,176 @@
     font-family: inherit;
     border: none;
     background: none;
-    border-bottom: solid 1px currentColor;
+    border-bottom: solid 2px currentColor;
+    outline: none;
   }
-  #pagkakabasa:empty::after {
-    content: attr(data-placeholder);
+  input:focus {
+    border-color: #edc200;
   }
   #baybayin {
     font-family: "Noto Sans Tagalog", system-ui;
     font-size: 2.2em;
   }
+  input::placeholder {
+    color: inherit;
+    opacity: 0.2;
+  }
+  #pagkakabasa:empty::after,
   #baybayin:empty::after {
     content: attr(data-placeholder);
+    opacity: 0.2;
+  }
+  button {
+    font: inherit;
+    font-weight: bold;
+    padding: 0.5em;
+    border: none;
+    border-radius: 0.2em;
+    cursor: pointer;
+    outline: none;
+  }
+  button:disabled {
+    filter: sepia(0.5) saturate(0.8) contrast(0.8);
+    cursor: not-allowed;
+  }
+  #pindutanParaLikhain {
+    position: absolute;
+    bottom: -1.5rem;
+    padding: 0 0.1em;
+    font-family: "Cubao Narrow", sans-serif;
+    font-weight: normal;
+    font-size: 3em;
+    letter-spacing: 0.02em;
+    border-radius: 0.1em;
+    background: none;
+    color: #bd1003;
+    overflow: hidden;
+    box-shadow: 0 0.1em 0.2em #6408;
+    z-index: 0;
+    transform-origin: bottom;
+    transition: none 0.04s ease-in;
+    transition-property: box-shadow, transform;
+  }
+  #pindutanParaLikhain:disabled {
+    box-shadow: 0 0.1em 0.1em #6402;
+  }
+  .lumikha {
+    transform: scaleY(2);
+  }
+  #pindutanParaLikhain::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: #f8f7f6;
+    z-index: -1;
+  }
+  #pindutanParaLikhain::after {
+    content: "";
+    position: absolute;
+    left: 15%;
+    right: 15%;
+    top: 20%;
+    bottom: 10%;
+    border-radius: 50%;
+    background: #f8ed8d;
+    z-index: -1;
+  }
+  #pindutanParaLikhain:enabled:focus-visible,
+  #pindutanParaLikhain:enabled:hover {
+    box-shadow: 0 0.1em 0.3em #6408;
+    transform: scale(1.02);
+  }
+  #pindutanParaLikhain:enabled:active {
+    box-shadow: 0 0.05em 0.05em #6408;
+    transform: scale(1);
+  }
+  .kaligrapiya {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 2em 0 0;
+    box-sizing: border-box;
+    background: #f2eee7;
+  }
+  canvas {
+    margin: 2em 1em;
+    width: 100%;
+    max-width: 60em;
+    border-radius: 0.2em;
+    background: #fff;
+    box-shadow: 0 0.1em 0.3em #6403;
+    box-sizing: border-box;
   }
 </style>
 
 <header>
   <h1>
-    <span class="pamagatPasulat">Pasulat</span><br />
-    <span class="pamagatNaman">Naman</span>
+    <span class="pamagatUnangLinya">sulat</span><br />
+    <span class="pamagatIkalawangLinya">baybay</span>
   </h1>
   <h2 data-salin="pakilala">Baybayin transliterator & calligraphy generator</h2>
 </header>
 
-<div class="tagalog">
-  <label for="salita" data-salin="tagalogNaSalita">Tagalog word</label>
-  <input id="salita" placeholder="salita" />
-</div>
-
-<div class="baybayin">
-  <div>
-    <label for="pagkakabasa" data-salin="pagkakabasa">Interpretation</label>
-    <div id="pagkakabasa" data-placeholder="sa · li · ta"></div>
+<form id="sagutan" action="#">
+  <div class="tagalog">
+    <label for="salita" data-salin="tagalogNaSalita">Tagalog word</label>
+    <input id="salita" placeholder="salita" autofocus />
   </div>
-  <div>
-    <label for="baybayin">Baybayin</label>
-    <div id="baybayin" data-placeholder="ᜐᜎᜒᜆ"></div>
-  </div>
-</div>
 
-<div class="kaligrapiya">K</div>
+  <div class="baybayin">
+    <div>
+      <label for="pagkakabasa" data-salin="pagkakabasa">Interpretation</label
+      >(?)
+      <div id="pagkakabasa" data-placeholder="sa · li · ta"></div>
+    </div>
+    <div>
+      <label for="baybayin">Baybayin</label>
+      <div id="baybayin" data-placeholder="ᜐᜎᜒᜆ"></div>
+    </div>
+  </div>
+
+  <button id="pindutanParaLikhain" disabled>
+    <span class="lumikha" data-salin="lumikha">·Generate·</span>
+  </button>
+</form>
+
+<div class="kaligrapiya">
+  <canvas id="kambas" width="1080" height="1080" />
+</div>
 
 <script type="module" async>
   import { baybayin } from "./baybay.mjs";
   import { gawingUnicode } from "./unicode.mjs";
   import { isalinAngPahina } from "./salin.mjs";
 
+  const sagutan = document.getElementById("sagutan");
   const patlangNgSalita = document.getElementById("salita");
   const resultangPagkakabasa = document.getElementById("pagkakabasa");
   const resultangBaybayin = document.getElementById("baybayin");
+  const pindutanParaLikhain = document.getElementById("pindutanParaLikhain");
 
-  patlangNgSalita.addEventListener("input", andar);
+  patlangNgSalita.addEventListener("input", isalinSaBaybayin);
+  sagutan.addEventListener("submit", isulatAngKaligrapiya);
 
-  function andar() {
+  function isalinSaBaybayin() {
     const baybay = baybayin(patlangNgSalita.value, "tl");
+    pindutanParaLikhain.disabled = !patlangNgSalita.value || !baybay;
     resultangPagkakabasa.textContent = baybay.join(" · ");
     resultangBaybayin.textContent = gawingUnicode(baybay);
   }
 
+  function isulatAngKaligrapiya(ganap) {
+    ganap.preventDefault();
+    // gawin: kaligrapiya.mjs
+    alert("di pa tapos");
+  }
+
   isalinAngPahina();
-  andar();
+  isalinSaBaybayin();
 </script>
 
 <script nomodule>

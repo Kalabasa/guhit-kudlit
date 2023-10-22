@@ -8,3 +8,8 @@
   src: url("./cubao_wide.otf") format("opentype");
   font-weight: normal;
 }
+@font-face {
+  font-family: "Cubao Narrow";
+  src: url("./cubao_narrow.otf") format("opentype");
+  font-weight: normal;
+}

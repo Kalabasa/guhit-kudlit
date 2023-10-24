@@ -10,6 +10,9 @@ dapat(baybayin("daan")).ay(["da", "a", "n"]);
 dapat(baybayin("doon")).ay(["du", "u", "n"]);
 dapat(baybayin("biik")).ay(["bi", "i", "k"]);
 dapat(baybayin("kailan")).ay(["ka", "i", "la", "n"]);
+dapat(baybayin("baon")).ay(["ba", "u", "n"]);
+dapat(baybayin("baul")).ay(["ba", "u", "l"]);
+dapat(baybayin("kain")).ay(["ka", "i", "n"]);
 
 // Di normal na baybay
 dapat(baybayin("tilapia")).ay(["ti", "la", "pi", "ya"]);
@@ -48,6 +51,7 @@ dapat(baybayin("Leshrac")).ay(["li", "s", "da", "k"]);
 dapat(baybayin("Mae")).ay(["mi", "y"]);
 dapat(baybayin("Maria")).ay(["ma", "di", "ya"]);
 dapat(baybayin("Michael")).ay(["ma", "y", "ki", "l"]);
+dapat(baybayin("Paulo")).ay(["pa", "w", "lo"]);
 dapat(baybayin("Philippines")).ay(["pi", "li", "pi", "n", "s"]);
 dapat(baybayin("Quinn")).ay(["ku", "wi", "n"]);
 dapat(baybayin("Rogelio")).ay(["du", "hi", "li", "yu"]);

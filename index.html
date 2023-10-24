@@ -70,7 +70,7 @@
     justify-self: end;
   }
   .wikaan a {
-    color: #d27c00;
+    color: #aa4f00;
   }
   @media (max-width: 600px) {
     header {
@@ -254,12 +254,11 @@
 
   <div class="baybayin">
     <div>
-      <label for="pagkakabasa" data-salin="pagkakabasa">Interpretation</label
-      >(?)
+      <label data-salin="pagkakabasa">Interpretation</label>(?)
       <div id="pagkakabasa" data-placeholder="sa · li · ta"></div>
     </div>
     <div>
-      <label for="baybayin">Baybayin</label>
+      <label>Baybayin</label>
       <div id="baybayin" data-placeholder="ᜐᜎᜒᜆ"></div>
     </div>
   </div>
@@ -270,12 +269,10 @@
 </form>
 
 <div class="kaligrapiya">
-  <canvas id="kambas" width="1080" height="1080" />
+  <canvas id="kambas" width="1080" height="1350" />
 </div>
 
 <script type="module" async>
-  import { baybayin } from "./baybay.mjs";
-  import { gawingUnicode } from "./unicode.mjs";
   import { isalinAngPahina } from "./salin.mjs";
 
   const sagutan = document.getElementById("sagutan");
@@ -284,24 +281,33 @@
   const resultangBaybayin = document.getElementById("baybayin");
   const pindutanParaLikhain = document.getElementById("pindutanParaLikhain");
 
+  let baybay = [];
+
   patlangNgSalita.addEventListener("input", isalinSaBaybayin);
   sagutan.addEventListener("submit", isulatAngKaligrapiya);
 
-  function isalinSaBaybayin() {
-    const baybay = baybayin(patlangNgSalita.value);
+  async function isalinSaBaybayin() {
+    const [{ baybayin }, { gawingUnicode }] = await Promise.all([
+      import("./baybay.mjs"),
+      import("./unicode.mjs"),
+    ]);
+
+    baybay = baybayin(patlangNgSalita.value);
     pindutanParaLikhain.disabled = !patlangNgSalita.value || !baybay;
     resultangPagkakabasa.textContent = baybay.join(" · ");
     resultangBaybayin.textContent = gawingUnicode(baybay);
   }
 
-  function isulatAngKaligrapiya(ganap) {
+  async function isulatAngKaligrapiya(ganap) {
     ganap.preventDefault();
-    // gawin: kaligrapiya.mjs
-    alert("di pa tapos");
+
+    const { iguhitAngKaligrapiya } = await import("./kaligrapiya.mjs");
+
+    iguhitAngKaligrapiya(baybay);
   }
 
   isalinAngPahina();
-  isalinSaBaybayin();
+  setTimeout(() => isalinSaBaybayin(), 2000);
 </script>
 
 <script nomodule>

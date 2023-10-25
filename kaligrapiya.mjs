@@ -3,74 +3,140 @@ const P5 = window.p5;
 let p5 = null;
 
 // ⎫
-function guhitTalon(x0, y0, x1, y1) {
-  const haba = Math.abs(y1 - y0);
+function guhitTalon(x0, y0, x1, y1, hx, hy) {
   return [
     x0, y0,
-    (x0 + x1) / 2 + haba * 0.2, y0,
+    timpla(x0, x1, 0.5) + hx, y0,
+    timpla(x0, x1, 0.75), timpla(y0, y1, 0.75),
     x1, y1
   ];
 }
 // ᜑ
-function guhitAlon(x0, y0, x1, y1) {
-  const haba = Math.abs(x1 - x0);
+function guhitAlon(x0, y0, x1, y1, hx, hy) {
   return [
     x0, y0,
-    x0, y0 + haba * 0.1,
-    x1, y1 - haba * 0.1,
+    timpla(x0, x1, 0.15), y0 + hy,
+    timpla(x0, x1, 0.85), y1 - hy,
     x1, y1
   ];
 }
 // ᜂ
-function guhitIlog(x0, y0, x1, y1) {
-  return [x0, y0, x1, y1];
+function guhitIlog(x0, y0, x1, y1, hx, hy) {
+  return [
+    x0, y0,
+    timpla(x0, x1, 0.05) + hx * 0.8, timpla(y0, y1, 0.05),
+    timpla(x0, x1, 0.25) + hx, timpla(y0, y1, 0.25),
+    timpla(x0, x1, 0.4) + hx * 0.4, timpla(y0, y1, 0.4),
+    timpla(x0, x1, 0.6) + hx * 0.8, timpla(y0, y1, 0.6),
+    timpla(x0, x1, 0.8) + hx * 0.6, timpla(y0, y1, 0.8),
+    x1, y1
+  ];
 }
 // ω
-function guhitUlap(x0, y0, x1, y1) {
-  return [x0, y0, x1, y1];
+function guhitUlap(x0, y0, x1, y1, hx, hy) {
+  return [
+    x0, y0,
+    timpla(x0, x1, 0.25), timpla(y0, y1, 0.25) + hy,
+    timpla(x0, x1, 0.5), timpla(y0, y1, 0.5),
+    timpla(x0, x1, 0.75), timpla(y0, y1, 0.75) + hy,
+    x1, y1
+  ];
 }
 // ∩
-function guhitBundok(x0, y0, x1, y1, x2, y2) {
+function guhitBundok(x0, y0, x1, y1, x2, y2, hx, hy) {
   return [x0, y0, x1, y1, x2, y2];
 }
 // ⏤
-function guhitTuwid(x0, y0, x1, y1) {
+function guhitTuwid(x0, y0, x1, y1, hx, hy) {
   return [x0, y0, x1, y1];
+}
+
+function timpla(a, b, t) {
+  return a + (b - a) * t;
 }
 
 const DUGTONG = Symbol("dugtong");
 const PUTOL = Symbol("putol");
 
+const guhitDa = [
+  [guhitTalon, 0.0, 0.0, 0.0, 0.7, 0.1, 0.0],
+  [guhitAlon, DUGTONG, DUGTONG, 1.0, 0.8, 0.0, 0.1, PUTOL],
+  [guhitAlon, 0.15, 0.1, 1.0, 0.2, 0.0, 0.1, PUTOL],
+];
+const guhitYa = [
+  [guhitTalon, 0.0, 0.0, 0.1, 0.8, 0.1, 0.0],
+  [guhitAlon, DUGTONG, DUGTONG, 1.0, 0.4, 0.0, 0.05, PUTOL],
+];
+
 const talaguhitan = {
   "a": [
-    [guhitTalon, 0.0, 0.0, 0.0, 1.0],
-    [guhitAlon, DUGTONG, DUGTONG, 1.0, 0.0, PUTOL],
-    [guhitTuwid, -0.2, 0.5, 0.1, 0.5, PUTOL],
+    ...guhitYa,
+    [guhitTuwid, 0.0, 0.4, 0.2, 0.4, 0.0, 0.0, PUTOL],
   ],
   "i": [
-    [guhitTuwid, 0.0, 0.0, 1.0, 0.0, PUTOL],
-    [guhitUlap, 0.0, 1.0, 1.0, 1.0, PUTOL],
+    [guhitAlon, 0.0, 0.2, 1.0, 0.2, 0.0, 0.1, PUTOL],
+    [guhitUlap, 0.0, 0.6, 1.0, 0.6, 0.0, 0.2, PUTOL],
   ],
   "u": [
-    [guhitIlog, 0.5, 0.0, 0.5, 1.0, PUTOL],
+    [guhitIlog, 0.3, 0.0, 0.3, 1.0, 0.4, 0.0, PUTOL],
   ],
   "b": [
-    [guhitBundok, 0.0, 0.6, 0.5, 0.0, 1.0, 0.6],
-    [guhitUlap, DUGTONG, DUGTONG, 0.0, 0.6, PUTOL],
+    [guhitBundok, 0.0, 0.8, 0.5, 0.2, 1.0, 0.8, 0.0, 0.0],
+    [guhitUlap, DUGTONG, DUGTONG, 0.0, 0.8, 0.0, 0.2, PUTOL],
   ],
   "k": [
-    [guhitAlon, 0.0, 0.0, 1.0, 0.0, PUTOL],
-    [guhitAlon, 0.0, 1.0, 1.0, 1.0, PUTOL],
-    [guhitTuwid, 0.5, 0.0, 0.5, 1.0, PUTOL],
+    [guhitAlon, 0.0, 0.2, 1.0, 0.2, 0.0, 0.1, PUTOL],
+    [guhitAlon, 0.0, 0.8, 1.0, 0.8, 0.0, 0.1, PUTOL],
+    [guhitTuwid, 0.5, 0.2, 0.5, 0.8, 0.0, 0.0, PUTOL],
   ],
-  "d": [
-    [guhitTalon, 0.0, 0.0, 0.0, 1.0],
-    [guhitAlon, DUGTONG, DUGTONG, 1.0, 1.0, PUTOL],
-    [guhitAlon, 0.0, 0.0, 1.0, 0.0, PUTOL],
+  "d": guhitDa,
+  "g": [
+    [guhitIlog, 0.0, 0.0, 0.0, 1.0, 0.4, 0.0, PUTOL],
+    [guhitTalon, 0.3, 0.3, 1.0, 0.8, 0.2, 0.0, PUTOL],
   ],
+  "h": [
+    [guhitAlon, 0.0, 0.5, 1.0, 0.5, 0.0, 0.2, PUTOL],
+  ],
+  "l": [
+    [guhitAlon, 0.0, 0.2, 1.0, 0.2, 0.0, 0.1, PUTOL],
+    [guhitIlog, 0.5, 0.2, 0.5, 1.0, 0.15, 0.0, PUTOL],
+  ],
+  "m": [
+    ...guhitYa,
+    [guhitTuwid, 0.2, 0.5, 0.6, 0.5, 0.0, 0.0, PUTOL],
+  ],
+  "n": [
+    [guhitBundok, 0.0, 0.8, 0.5, 0.2, 1.0, 0.8, 0.0, 0.0, PUTOL],
+    [guhitIlog, 0.5, 0.2, 0.5, 1.0, 0.15, 0.0, PUTOL],
+  ],
+  "ng": [
+    [guhitTalon, 0.0, 0.2, 0.0, 0.8, 0.4, 0.0, PUTOL],
+    [guhitUlap, 0.4, 0.5, 1.0, 0.5, 0.0, 0.1, PUTOL],
+  ],
+  "p": [
+    ...guhitYa,
+    [guhitTuwid, 0.6, 0.6, 1.0, 0.6, 0.0, 0.0, PUTOL],
+  ],
+  "r": [
+    ...guhitDa,
+    [guhitTuwid, 0.5, 0.0, 0.5, 1.0, 0.0, 0.0, PUTOL],
+  ],
+  "s": [
+    [guhitTalon, 0.0, 0.2, 0.0, 0.8, 0.1, 0.0],
+    [guhitAlon, DUGTONG, DUGTONG, 0.8, 0.2, 0.0, 0.05],
+    [guhitIlog, DUGTONG, DUGTONG, 0.8, 1.0, 0.2, 0.0, PUTOL],
+  ],
+  "t": [
+    [guhitAlon, 0.0, 0.6, 1.0, 0.4, 0.0, 0.1, PUTOL],
+    [guhitTuwid, 0.5, 0.55, 0.1, 1.0, 0.0, 0.0, PUTOL],
+  ],
+  "y": guhitYa,
 };
 
 const palugit = 100; // px
+const bilangNgBakod = 20;
+let malapit = 0; // px
+let lapadNgGuhit = 0; // px
 let lapadNgTitik = 0; // px
 let tangkadNgTitik = 0; // px
 let bilangNgTitik = 0;
@@ -81,6 +147,7 @@ let hulingPunto = null; // { x: px, y: px }
 let diin = 0;
 let dulo = null; // { x: px, y: px }
 let hagibis = null; // { x: px, y: px }
+let bakod = null; // px[bilangNgBakod]
 let taposNa = () => { };
 
 /**
@@ -98,12 +165,18 @@ export function iguhitAngKaligrapiya(baybay) {
   tangkadNgTitik = Math.min(tangkad / bilangNgTitik, p5.height / 5);
   lapadNgTitik = tangkadNgTitik * 1.2;
   ikailangTitik = 0;
+  lapadNgGuhit = tangkadNgTitik / 4;
+  malapit = tangkadNgTitik / 20;
 
   pilaNgBaybay = [...baybay];
   pilaNgPunto = [];
+  hulingPunto = null;
 
+  diin = 0;
   dulo = null;
   hagibis = { x: 0, y: 0 };
+
+  bakod = Array(bilangNgBakod).fill(0);
 
   const pangako = new Promise(resolve => void (taposNa = resolve));
   p5.loop();
@@ -120,7 +193,7 @@ new P5((bago) => {
   };
 
   p5.draw = () => {
-    if (pilaNgPunto.length === 0) {
+    if (diin === 0 && pilaNgPunto.length === 0) {
       if (pilaNgBaybay.length === 0) {
         taposNa();
         p5.noLoop();
@@ -128,7 +201,7 @@ new P5((bago) => {
       }
 
       const titik = pilaNgBaybay.shift();
-      const mgaGuhit = talaguhitan[titik[0]];
+      const mgaGuhit = talaguhitan[titik.replace(/(?<!^)[aiu]/, "")];
 
       if (!mgaGuhit) throw new Error("Kulang ang talaguhitan para sa titik: " + titik);
 
@@ -140,7 +213,13 @@ new P5((bago) => {
         const putol = mgaPunto.slice(-1)[0] === PUTOL;
         if (putol) mgaPunto.pop();
 
-        const latag = mgaPunto.map(ilatag);
+        const latag =
+          mgaPunto.slice(0, -2)
+            .map((p, i) => ilatag(titikX, titikY, p, i))
+            .concat(
+              mgaPunto.slice(-2)
+                .map((p, i) => ilatag(0, 0, p, i))
+            );
         if (latag[0] === DUGTONG || latag[1] === DUGTONG) {
           latag[0] = pilaNgPunto[pilaNgPunto.length - 2];
           latag[1] = pilaNgPunto[pilaNgPunto.length - 1];
@@ -151,9 +230,9 @@ new P5((bago) => {
 
         if (putol) pilaNgPunto.push(PUTOL, PUTOL);
 
-        function ilatag(p, i) {
+        function ilatag(x, y, p, i) {
           if (p === DUGTONG) return p;
-          return (i % 2) === 0 ? titikX + p * lapadNgTitik : titikY + p * tangkadNgTitik;
+          return (i % 2) === 0 ? x + p * lapadNgTitik : y + p * tangkadNgTitik;
         }
       }
 
@@ -163,16 +242,28 @@ new P5((bago) => {
     const punto = { x: pilaNgPunto[0], y: pilaNgPunto[1] };
     if (!hulingPunto) hulingPunto = punto;
 
+    const paputol = punto.x === PUTOL || punto.y === PUTOL;
+    if (paputol) {
+      punto.x = dulo.x + hagibis.x;
+      punto.y = dulo.y + hagibis.y;
+      let talsik = 0.8;
+      if (pilaNgPunto.length <= 2) {
+        if (pilaNgBaybay.length === 0) {
+          talsik = 1.1;
+        } else {
+          talsik = 1.0;
+        }
+      }
+      hagibis.x = hagibis.x * talsik - malapit * 0.1 * Math.max(0, talsik - 1);
+      hagibis.y = hagibis.y * talsik - malapit * 0.05 * Math.max(0, talsik - 1);
+    }
+
     if (punto.x === DUGTONG || punto.y === DUGTONG) {
       pilaNgPunto = pilaNgPunto.slice(2);
-    } else if (punto.x === PUTOL || punto.y === PUTOL) {
-      diin = 0;
-      pilaNgPunto = pilaNgPunto.slice(2);
     } else {
-
       if (diin <= 0) {
         p5.beginShape();
-        diin = 1;
+        diin = 0.001;
         dulo = punto;
         hagibis = { x: 0, y: 0 };
       }
@@ -185,14 +276,23 @@ new P5((bago) => {
       hagibis.y *= pagkiskis;
       dulo.x += hagibis.x;
       dulo.y += hagibis.y;
+      diin =
+        paputol
+          ? Math.max(0, Math.min(diin - malapit / 400, 1) * 0.998)
+          : Math.max(1e-6, timpla(diin, tangkangDiin(), 0.1));
       p5.noFill();
       p5.stroke(0, 0, 0);
-      p5.strokeWeight(5);
+      p5.strokeWeight(lapadNgGuhit * diin);
       p5.line(dulo.x - hagibis.x, dulo.y - hagibis.y, dulo.x, dulo.y);
 
-      if (lampas(punto)) {
+      bakuran(dulo.x, dulo.y + lapadNgGuhit / 2);
+
+      if (paputol ? diin < 1e-6 : lampas(punto)) {
         hulingPunto = punto;
         pilaNgPunto = pilaNgPunto.slice(2);
+        if (paputol) {
+          diin = 0;
+        }
       }
     }
   };
@@ -200,12 +300,18 @@ new P5((bago) => {
 
 function darasigin(punto, dulo) {
   const layo = Math.hypot(punto.x - dulo.x, punto.y - dulo.y);
-  if (layo === 0) {
-    return { x: 0, y: 0 };
-  }
+  if (layo === 0) return { x: 0, y: 0 };
   const tungoX = (punto.x - dulo.x) / layo;
   const tungoY = (punto.y - dulo.y) / layo;
-  const darasigan = Math.sign(layo) * Math.max(2, Math.abs(layo) * 0.001);
+
+  const bilis = Math.hypot(hagibis.x, hagibis.y);
+  const bilisX = bilis === 0 ? 0 : hagibis.x / bilis;
+  const bilisY = bilis === 0 ? 0 : hagibis.y / bilis;
+
+  const darasigan =
+    (1.2 / malapit)
+    + (Math.log1p(layo / malapit) * 0.3)
+    * Math.max(0, sigmoyd(dot(tungoX, tungoY, bilisX, bilisY) * 6 - 2));
   return {
     x: tungoX * darasigan,
     y: tungoY * darasigan,
@@ -213,17 +319,27 @@ function darasigin(punto, dulo) {
 }
 
 function kiskis(hagibis) {
-  const s = 0.1;
-  const bilis = Math.hypot(hagibis.x, hagibis.y);
-  return bilis === 0 ? 1 : 1 / Math.log(Math.abs(bilis * s) + Math.E);
+  const k = 0.97;
+  const s = 0.3;
+  const bilis = Math.hypot(hagibis.x, hagibis.y) / malapit;
+  return bilis === 0 ? k : k / Math.log(Math.abs(bilis * s) + Math.E);
+}
+
+function tangkangDiin() {
+  const bilis = Math.hypot(hagibis.x, hagibis.y) / malapit;
+  return Math.min(1, 2 * Math.pow(0.06 / (0.01 + bilis), 0.5));
 }
 
 function lampas(punto) {
-  const layo = Math.hypot(punto.x - dulo.x, punto.y - dulo.y);
-  if (layo < 4) return true;
+  const laktaw = 2;
+  const laktawX = dulo.x + hagibis.x * laktaw;
+  const laktawY = dulo.y + hagibis.y * laktaw;
 
-  const tungoX = (punto.x - dulo.x) / layo;
-  const tungoY = (punto.y - dulo.y) / layo;
+  const layo = Math.hypot(punto.x - laktawX, punto.y - laktawY);
+  if (layo <= malapit) return true;
+
+  const tungoX = (punto.x - laktawX) / layo;
+  const tungoY = (punto.y - laktawY) / layo;
 
   const pagitan = Math.hypot(punto.x - hulingPunto.x, punto.y - hulingPunto.y);
   if (pagitan === 0) return true;
@@ -231,6 +347,27 @@ function lampas(punto) {
   const dakoX = (punto.x - hulingPunto.x) / pagitan;
   const dakoY = (punto.y - hulingPunto.y) / pagitan;
 
-  const dot = tungoX * dakoX + tungoY * dakoY;
-  return dot <= 0;
+  return dot(tungoX, tungoY, dakoX, dakoY) <= 0;
+}
+
+function bakuran(x, y) {
+  const a = Math.floor(saanSaBakod(x));
+  bakod[a] = Math.max(bakod[a], y);
+}
+
+function bakodSa(x) {
+  const saan = saanSaBakod(x);
+  return timpla(bakod[Math.floor(saan)], bakod[Math.ceil(saan)], saan - Math.floor(saan));
+}
+
+function saanSaBakod(x) {
+  return Math.max(0, Math.max(bilangNgBakod - 1, (x - (p5.width - lapadNgTitik) / 2) * (bilangNgBakod - 1))) / lapadNgTitik;
+}
+
+function dot(a, b, x, y) {
+  return a * x + b * y;
+}
+
+function sigmoyd(x) {
+  return 1 / (1 + Math.pow(Math.E, -x));
 }

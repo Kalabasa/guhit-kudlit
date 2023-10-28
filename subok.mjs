@@ -21,6 +21,7 @@ dapat(baybayin("durian")).ay(["du", "di", "ya", "n"]);
 // Bigkas na iba sa baybay
 dapat(baybayin("ng")).ay(["na", "ng"]);
 dapat(baybayin("mga")).ay(["ma", "nga"]);
+dapat(baybayin("ng",{ payak: true })).ay(["ng"]);
 
 // Da at Ra
 dapat(baybayin("suri")).ay(["su", "di"]);
@@ -28,42 +29,43 @@ dapat(baybayin("suri", { bukodAngRa: true })).ay(["su", "ri"]);
 dapat(baybayin("durian", { bukodAngRa: true })).ay(["du", "ri", "ya", "n"]);
 
 // Mga pangalan
-dapat(baybayin("Alfonso")).ay(["a", "l", "pu", "n", "su"]);
-dapat(baybayin("Angela")).ay(["a", "n", "d", "yi", "la"]);
-dapat(baybayin("Ashley")).ay(["a", "s", "li"]);
-dapat(baybayin("Cane")).ay(["ki", "y", "n"]);
-dapat(baybayin("Cesar")).ay(["si", "sa", "d"]);
-dapat(baybayin("Christine")).ay(["k", "di", "s", "ti", "n"]);
-dapat(baybayin("Christopher")).ay(["k", "di", "s", "tu", "pi", "d"]);
-dapat(baybayin("Dane")).ay(["di", "y", "n"]);
-dapat(baybayin("Dexter")).ay(["di", "k", "s", "ti", "d"]);
-dapat(baybayin("Diane")).ay(["di", "ya", "n"]);
-dapat(baybayin("Frederico")).ay(["p", "di", "di", "di", "ku"]);
-dapat(baybayin("Gilbert")).ay(["gi", "l", "bi", "d", "t"]);
-dapat(baybayin("Ian")).ay(["i", "ya", "n"]);
-dapat(baybayin("Jenny")).ay(["d", "yi", "ni"]);
-dapat(baybayin("John")).ay(["d", "ya", "n"]);
-dapat(baybayin("Juan")).ay(["hu", "wa", "n"]);
-dapat(baybayin("Keen")).ay(["ki", "n"]);
-dapat(baybayin("Kenneth")).ay(["ki", "ni", "t"]);
-dapat(baybayin("Lean")).ay(["li", "ya", "n"]);
-dapat(baybayin("Leshrac")).ay(["li", "s", "da", "k"]);
-dapat(baybayin("Mae")).ay(["mi", "y"]);
-dapat(baybayin("Maria")).ay(["ma", "di", "ya"]);
-dapat(baybayin("Michael")).ay(["ma", "y", "ki", "l"]);
-dapat(baybayin("Paulo")).ay(["pa", "w", "lo"]);
-dapat(baybayin("Philippines")).ay(["pi", "li", "pi", "n", "s"]);
-dapat(baybayin("Quinn")).ay(["ku", "wi", "n"]);
-dapat(baybayin("Rogelio")).ay(["du", "hi", "li", "yu"]);
-dapat(baybayin("Roger")).ay(["du", "d", "yi", "d"]);
-dapat(baybayin("Rose")).ay(["du", "w", "s"]);
-dapat(baybayin("Ryle")).ay(["da", "y", "l"]);
-dapat(baybayin("Sharon")).ay(["s", "ya", "du", "n"]);
-dapat(baybayin("Stephanie")).ay(["s", "ti", "pa", "ni"]);
-dapat(baybayin("Vanessa")).ay(["ba", "ni", "sa"]);
-dapat(baybayin("Xian")).ay(["si", "ya", "n"]);
-dapat(baybayin("Zenny")).ay(["si", "ni"]);
-dapat(baybayin("Zoey")).ay(["su", "wi"]);
+const p = { ingles: true };
+dapat(baybayin("Alfonso", p)).ay(["a", "l", "pu", "n", "su"]);
+dapat(baybayin("Angela", p)).ay(["a", "n", "d", "yi", "la"]);
+dapat(baybayin("Ashley", p)).ay(["a", "s", "li"]);
+dapat(baybayin("Cane", p)).ay(["ki", "y", "n"]);
+dapat(baybayin("Cesar", p)).ay(["si", "sa", "d"]);
+dapat(baybayin("Christine", p)).ay(["k", "di", "s", "ti", "n"]);
+dapat(baybayin("Christopher", p)).ay(["k", "di", "s", "tu", "pi", "d"]);
+dapat(baybayin("Dane", p)).ay(["di", "y", "n"]);
+dapat(baybayin("Dexter", p)).ay(["di", "k", "s", "ti", "d"]);
+dapat(baybayin("Diane", p)).ay(["di", "ya", "n"]);
+dapat(baybayin("Frederico", p)).ay(["p", "di", "di", "di", "ku"]);
+dapat(baybayin("Gilbert", p)).ay(["gi", "l", "bi", "d", "t"]);
+dapat(baybayin("Ian", p)).ay(["i", "ya", "n"]);
+dapat(baybayin("Jenny", p)).ay(["d", "yi", "ni"]);
+dapat(baybayin("John", p)).ay(["d", "ya", "n"]);
+dapat(baybayin("Juan", p)).ay(["hu", "wa", "n"]);
+dapat(baybayin("Keen", p)).ay(["ki", "n"]);
+dapat(baybayin("Kenneth", p)).ay(["ki", "ni", "t"]);
+dapat(baybayin("Lean", p)).ay(["li", "ya", "n"]);
+dapat(baybayin("Leshrac", p)).ay(["li", "s", "da", "k"]);
+dapat(baybayin("Mae", p)).ay(["mi", "y"]);
+dapat(baybayin("Maria", p)).ay(["ma", "di", "ya"]);
+dapat(baybayin("Michael", p)).ay(["ma", "y", "ki", "l"]);
+dapat(baybayin("Paulo", p)).ay(["pa", "w", "lo"]);
+dapat(baybayin("Philippines", p)).ay(["pi", "li", "pi", "n", "s"]);
+dapat(baybayin("Quinn", p)).ay(["ku", "wi", "n"]);
+dapat(baybayin("Rogelio", p)).ay(["du", "hi", "li", "yu"]);
+dapat(baybayin("Roger", p)).ay(["du", "d", "yi", "d"]);
+dapat(baybayin("Rose", p)).ay(["du", "w", "s"]);
+dapat(baybayin("Ryle", p)).ay(["da", "y", "l"]);
+dapat(baybayin("Sharon", p)).ay(["s", "ya", "du", "n"]);
+dapat(baybayin("Stephanie", p)).ay(["s", "ti", "pa", "ni"]);
+dapat(baybayin("Vanessa", p)).ay(["ba", "ni", "sa"]);
+dapat(baybayin("Xian", p)).ay(["si", "ya", "n"]);
+dapat(baybayin("Zenny", p)).ay(["si", "ni"]);
+dapat(baybayin("Zoey", p)).ay(["su", "wi"]);
 
 // ----------------------------------------------------------------------------
 

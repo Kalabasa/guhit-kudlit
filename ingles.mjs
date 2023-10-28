@@ -1,7 +1,7 @@
 import { baybayin } from "./baybay.mjs";
 
-export function baybayinAngPangalan(pangalan) {
-  pangalan = pangalan.toLowerCase()
+export function baybayinAngIngles(ingles) {
+  ingles = ingles.toLowerCase()
     .replace(/tia/g, "tya")
     .replace(/c(?=[eiy])/g, "s")
     .replace(/e[ei]/g, "i")
@@ -28,5 +28,5 @@ export function baybayinAngPangalan(pangalan) {
     .replace(/y$/, "i")
     .replace(/w$/, "u")
     .replace(/e$/, "");
-  return baybayin(pangalan, { payak: true });
+  return baybayin(ingles, { payak: true });
 }

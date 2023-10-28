@@ -102,6 +102,19 @@
     padding: 0 1em;
     box-sizing: border-box;
   }
+  #pindutanNgPamalitSalita {
+    margin: 0;
+    padding: 0.5em;
+    border: none;
+    background: none;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+  }
+  #pindutanNgPamalitSalita:focus-visible,
+  #pindutanNgPamalitSalita:hover {
+    color: #aa4f00;
+  }
   label {
     display: block;
     font-size: 0.8em;
@@ -109,7 +122,7 @@
     text-transform: uppercase;
   }
   input,
-  #pagkakabasa,
+  #pagkapantig,
   #baybayin {
     margin: 0.25em 0 1em;
     padding: 0;
@@ -118,7 +131,7 @@
     box-sizing: border-box;
     font-size: 1.5em;
   }
-  #pagkakabasa,
+  #pagkapantig,
   #baybayin {
     display: flex;
     align-items: center;
@@ -142,25 +155,84 @@
     color: inherit;
     opacity: 0.2;
   }
-  #pagkakabasa:empty::after,
+  #pagkapantig:empty::after,
   #baybayin:empty::after {
     content: attr(data-placeholder);
     opacity: 0.2;
   }
-  button {
-    font: inherit;
-    font-weight: bold;
-    padding: 0.5em;
-    border: none;
-    border-radius: 0.2em;
-    cursor: pointer;
-    outline: none;
+  .tagalog {
+    position: relative;
   }
-  button:disabled {
-    filter: sepia(0.5) saturate(0.8) contrast(0.8);
-    cursor: not-allowed;
+  #mali {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin: 0;
+    padding: 1em;
+    border: solid 1px currentColor;
+    border-radius: 0.5em;
+    box-sizing: border-box;
+    background: #f5efef;
+    color: #9c0000;
+    box-shadow: 0 0.4em 0.4em #6206;
+    z-index: 1;
+  }
+  #mali::after {
+    position: absolute;
+    left: 50%;
+    top: -0.5rem;
+    content: "";
+    display: block;
+    width: 1rem;
+    height: 1rem;
+    box-sizing: border-box;
+    border: inherit;
+    border-right: none;
+    border-bottom: none;
+    background: inherit;
+    transform: translate(-50%, -1px) rotate(45deg);
+  }
+  #mali > p:first-of-type {
+    margin-top: 0;
+  }
+  #mali > p:last-of-type {
+    margin-bottom: 0;
+  }
+  #mali ul {
+    list-style: none;
+  }
+  #mali li {
+    display: flex;
+    justify-content: space-evenly;
+    font-size: 1.2em;
+    color: #000;
+  }
+  #mali .bago,
+  #mali .tapos {
+    flex: 1 1 50%;
+    text-align: center;
+  }
+  #mali del {
+    color: #800;
+    font-weight: bold;
+  }
+  #mali ins {
+    color: #088;
+    font-weight: bold;
+  }
+  #mali label {
+    color: #000;
+    background: #fff;
+  }
+  #pamagatNgMali {
+    font-size: 1.2em;
+    font-weight: bold;
   }
   #pindutanParaLikhain {
+    border: none;
+    cursor: pointer;
+    outline: none;
     position: absolute;
     bottom: -1.5rem;
     padding: 0 0.1em;
@@ -179,7 +251,9 @@
     transition-property: box-shadow, transform;
   }
   #pindutanParaLikhain:disabled {
+    filter: sepia(0.5) saturate(0.8) contrast(0.8);
     box-shadow: 0 0.1em 0.1em #6402;
+    cursor: not-allowed;
   }
   .lumikha {
     transform: scaleY(2);
@@ -250,14 +324,22 @@
 
 <form id="sagutan" action="#">
   <div class="tagalog">
-    <label for="salita" data-salin="tagalogNaSalita">Tagalog word</label>⏷
+    <label for="salita">
+      <span id="tekstoNgPamalitSalita" data-salin="tagalogNaSalita"
+        >Tagalog word</span
+      >
+      <button id="pindutanNgPamalitSalita" type="button">⏷</button>
+    </label>
     <input id="salita" placeholder="salita" autofocus />
+    <div id="mali" hidden>
+      <p id="pamagatNgMali"></p>
+    </div>
   </div>
 
   <div class="baybayin">
     <div>
-      <label data-salin="pagkakabasa">Interpretation</label>(?)
-      <div id="pagkakabasa" data-placeholder="sa · li · ta"></div>
+      <label data-salin="pagkapantig">Interpretation</label>
+      <div id="pagkapantig" data-placeholder="sa · li · ta"></div>
     </div>
     <div>
       <label>Baybayin</label>
@@ -275,29 +357,78 @@
 </div>
 
 <script type="module" async>
-  import { isalinAngPahina } from "./salin.mjs";
+  import { salin, isalinAngPahina } from "./salin.mjs";
 
   const sagutan = document.getElementById("sagutan");
   const patlangNgSalita = document.getElementById("salita");
-  const resultangPagkakabasa = document.getElementById("pagkakabasa");
+  const tekstoNgPamalitSalita = document.getElementById(
+    "tekstoNgPamalitSalita"
+  );
+  const pindutanNgPamalitSalita = document.getElementById(
+    "pindutanNgPamalitSalita"
+  );
+  const resultangMali = document.getElementById("mali");
+  const pamagatNgMali = document.getElementById("pamagatNgMali");
+  const paliwanagNgMali = document.getElementById("paliwanagNgMali");
+  const resultangPagkapantig = document.getElementById("pagkapantig");
   const resultangBaybayin = document.getElementById("baybayin");
   const pindutanParaLikhain = document.getElementById("pindutanParaLikhain");
 
+  const mgaParaanNgSalita = [
+    {
+      teksto: salin.tagalogNaSalita(),
+      paraan: {},
+    },
+    {
+      teksto: salin.inglesNaSalitaEksperimental(),
+      paraan: { ingles: true },
+    },
+    {
+      teksto: salin.tagalogBukodAngRa(),
+      paraan: { bukodAngRa: true },
+    },
+  ];
+  let paraanNgSalita = 0;
   let baybay = [];
 
+  pindutanNgPamalitSalita.addEventListener("click", palitanAngSalita);
   patlangNgSalita.addEventListener("input", isalinSaBaybayin);
   sagutan.addEventListener("submit", isulatAngKaligrapiya);
 
   async function isalinSaBaybayin() {
-    const [{ baybayin }, { gawingUnicode }] = await Promise.all([
-      import("./baybay.mjs"),
-      import("./unicode.mjs"),
-    ]);
+    const [{ baybayin }, { gawingUnicode }, { DiWastongLetra }] =
+      await Promise.all([
+        import("./baybay.mjs"),
+        import("./unicode.mjs"),
+        import("./mali.mjs"),
+      ]);
 
-    baybay = baybayin(patlangNgSalita.value);
-    pindutanParaLikhain.disabled = !patlangNgSalita.value || !baybay;
-    resultangPagkakabasa.textContent = baybay.join(" · ");
-    resultangBaybayin.textContent = gawingUnicode(baybay);
+    try {
+      resultangMali.hidden = true;
+      baybay = baybayin(
+        patlangNgSalita.value,
+        mgaParaanNgSalita[paraanNgSalita].paraan
+      );
+      pindutanParaLikhain.disabled = !patlangNgSalita.value || !baybay;
+      resultangPagkapantig.textContent = baybay.join(" · ");
+      resultangBaybayin.textContent = gawingUnicode(baybay);
+    } catch (mali) {
+      if (mali instanceof DiWastongLetra) {
+        resultangMali.hidden = false;
+        pamagatNgMali.innerHTML = mali.pamagat();
+        resultangMali.replaceChildren(pamagatNgMali);
+        resultangMali.innerHTML += mali.paliwanag();
+      } else {
+        throw mali;
+      }
+    }
+  }
+
+  function palitanAngSalita() {
+    paraanNgSalita = (paraanNgSalita + 1) % mgaParaanNgSalita.length;
+    tekstoNgPamalitSalita.textContent =
+      mgaParaanNgSalita[paraanNgSalita].teksto;
+    isalinSaBaybayin();
   }
 
   async function isulatAngKaligrapiya(ganap) {

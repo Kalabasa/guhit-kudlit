@@ -40,8 +40,8 @@ function guhitUlap(x0, y0, x1, y1, hx, hy) {
     timpla(x0, x1, 0.1), timpla(y0, y1, 0.1) + hy * 0.8,
     timpla(x0, x1, 0.3), timpla(y0, y1, 0.3) + hy,
     timpla(x0, x1, 0.4), timpla(y0, y1, 0.4) + hy * 0.4,
-    timpla(x0, x1, 0.6), timpla(y0, y1, 0.6) + hy,
-    timpla(x0, x1, 0.9), timpla(y0, y1, 0.9) + hy,
+    timpla(x0, x1, 0.6), timpla(y0, y1, 0.6) + hy * 0.9,
+    timpla(x0, x1, 0.9), timpla(y0, y1, 0.9) + hy * 0.8,
     x1, y1 + hy * 0.2
   ];
 }
@@ -141,7 +141,7 @@ const talaguhitan = {
   ],
   "r": [
     ...guhitDa,
-    [guhitTuwid, 0.5, 0.0, 0.5, 1.0, 0.0, 0.0, PUTOL],
+    [guhitTuwid, 0.5, 0.8, 0.7, 1.0, 0.0, -0.1, PUTOL],
   ],
   "s": [
     [guhitTalon, 0.0, 0.2, 0.15, 1.0, 0.1, 0.0],
@@ -160,40 +160,61 @@ const talaguhitan = {
 };
 
 const mgaIstilo = {
-  "K": { // klasiko
+  "K": { // Klasiko
     panimulangDiin: 1e-6,
-    tindiNgDiin: 0.05,
-    tigasNgDiin: 0.02,
+    tindiNgDiin: 0.002,
+    tigasNgDiin: 0.001,
+    lapadNgGuhit: 0.19,
     tindiNgPaglampas: 1.0,
     kapalNgPinsel: 1.0,
     hugisNgPinsel: 0.0,
     angguloNgPinsel: () => 0,
     talsik: 1.00,
+    tangay: 1.0,
   },
-  "M": { // moderno
+  "M": { // Moderno
     panimulangDiin: 1e-6,
-    tindiNgDiin: 0.6,
+    tindiNgDiin: 0.35,
     tigasNgDiin: 0.2,
+    lapadNgGuhit: 0.16,
     tindiNgPaglampas: 0.9,
     kapalNgPinsel: 1.0,
     hugisNgPinsel: 0.0,
     angguloNgPinsel: () => 0,
     talsik: 0.95,
+    tangay: 0.8,
   },
-  "A": { // mala-Arabe
+  "H": { // Humihilis
     panimulangDiin: 0.2,
-    tindiNgDiin: 1.0,
-    tigasNgDiin: 4.0,
+    tindiNgDiin: 0.4,
+    tigasNgDiin: 0.4,
+    lapadNgGuhit: 0.18,
+    tindiNgPaglampas: 0.9,
+    kapalNgPinsel: 0.25,
+    hugisNgPinsel: 0.5,
+    // angguloNgPinsel: () => Math.PI * 0.8,
+    angguloNgPinsel: (x, y) => Math.PI * 0.75 + (x + y) * (x - y) / 60,
+    talsik: 0.95,
+    tangay: 0.1,
+    hagibis: ({ x, y }) => ({
+      x: x * 1.05,
+      y: y - y * Math.E ** -(malapit * 0.2 * y ** 2),
+    }),
+  },
+  "A": { // Mala-Arabe
+    panimulangDiin: 0.4,
+    tindiNgDiin: 0.4,
+    tigasNgDiin: 0.4,
+    lapadNgGuhit: 0.17,
     tindiNgPaglampas: 1.7,
     kapalNgPinsel: 0.25,
     hugisNgPinsel: 0.5,
-    angguloNgPinsel: (x, y) => {
-      return Math.PI * 0.5 + x * y / 60;
-    },
-    talsik: 1.11,
+    angguloNgPinsel: (x, y) => Math.PI * 0.5 + x * y / 60,
+    talsik: 1.15,
+    tangay: 0.2,
     hagibis: ({ x, y }) => ({
-      x: x - x * Math.E ** -(malapit * 0.015 * x ** 2),
-      y: y - y * Math.E ** -(malapit * 1.0 * y ** 2)
+      x: x - x * Math.E ** -(malapit * 0.016 * x ** 2),
+      y,
     }),
   },
 };
@@ -201,7 +222,7 @@ const mgaIstilo = {
 const palugit = 100; // px
 const bilangNgBakod = 30;
 const palugitSaKudlit = 1.2; // p/1
-let ngalanNgIstilo = new URLSearchParams(window.location.search).get("s") ?? "K"; // "K" | "M" | "A"
+let ngalanNgIstilo = new URLSearchParams(window.location.search).get("s") ?? "K";
 let istilo = null;
 let malapit = 0; // px
 let lapadNgGuhit = 0; // px
@@ -227,15 +248,15 @@ let taposNa = () => { };
 export function iguhitAngKaligrapiya(baybay) {
   p5.background(0xff);
 
+  istilo = mgaIstilo[ngalanNgIstilo];
+
   const tangkad = p5.height - palugit * 2;
   bilangNgTitik = baybay.length;
   tangkadNgTitik = Math.min(tangkad / bilangNgTitik, p5.height / 3) / palugitSaKudlit;
   lapadNgTitik = tangkadNgTitik * 1.2;
   ikailangTitik = 0;
-  lapadNgGuhit = tangkadNgTitik / 6;
+  lapadNgGuhit = tangkadNgTitik * istilo.lapadNgGuhit;
   malapit = tangkadNgTitik / 20;
-
-  istilo = mgaIstilo[ngalanNgIstilo];
 
   pilaNgBaybay = [...baybay];
   pilaNgPunto = [];
@@ -257,6 +278,7 @@ new P5((bago) => {
 
   p5.setup = () => {
     p5.disableFriendlyErrors = true;
+    p5.frameRate(60);
     const kambas = document.getElementById("kambas");
     p5.createCanvas(kambas.width, kambas.height, kambas);
     p5.noLoop();
@@ -331,14 +353,14 @@ new P5((bago) => {
       punto.x = dulo.x + hagibis.x;
       punto.y = dulo.y + hagibis.y;
       let talsik = 0.9;
-      talsik += 0.05 / Math.max(1, pilaNgPunto.length - 3);
+      talsik += 0.06 / Math.max(1, pilaNgPunto.length - 3);
       if (pilaNgBaybay.length === 0) {
         talsik += 0.5 / (10 + Math.max(0, pilaNgPunto.length - 2));
       }
       talsik *= istilo.talsik;
       const anggulo = Math.atan2(hagibis.y, hagibis.x);
       const liko = Math.PI / 2;
-      const lakasNgLiko = 0.3;
+      const lakasNgLiko = 0.2;
       const likoX = Math.cos(anggulo + liko) * malapit * lakasNgLiko;
       const likoY = Math.sin(anggulo + liko) * malapit * lakasNgLiko;
       const tulakX = likoX * Math.max(0, talsik - 1);
@@ -378,8 +400,8 @@ new P5((bago) => {
     const hulingDiin = diin;
     diin =
       paputol
-        ? Math.max(0, Math.min(1, diin - malapit * 0.002 - Math.max(0, 0.8 - diin) * 0.1))
-        : Math.max(1e-6, timpla(diin, tangkangDiin(), 0.08));
+        ? Math.max(0, Math.min(1, diin - 0.008 - Math.max(0, 0.8 - diin) * 0.1))
+        : Math.max(1e-6, timpla(diin, tangkangDiin(), 0.1));
 
     ipinta(
       dulo.x - hagibis.x, dulo.y - hagibis.y,
@@ -610,18 +632,21 @@ function darasigin(punto, dulo) {
   const bilisY = bilis === 0 ? 0 : hagibis.y / bilis;
 
   const darasigan =
-    (1.5 / malapit)
-    + (0.2 * Math.log1p(layo / malapit))
+    (0.012 * malapit)
+    + (0.011 * malapit)
+    * Math.log1p(layo / malapit)
     * Math.max(0, 3.0 * (sigmoyd((dot(tungoX, tungoY, bilisX, bilisY) - 0.7) * 6) - 0.5));
 
-
-  const nginig = malapit * 0.01 / (1 + darasigan * 6);
-  const nginigX = p5.randomGaussian(0, nginig);
-  const nginigY = p5.randomGaussian(0, nginig);
+  const nginig = malapit * 0.006 / (1 + darasigan * 6) * istilo.tangay;
+  const tangay = malapit * 0.008 * istilo.tangay;
+  const ingayX = dulo.x * malapit / 1e4;
+  const ingayY = dulo.y * malapit / 1e4;
+  const tangayX = p5.randomGaussian(0, nginig) + (p5.noise(ingayX, ingayY, 0) - 0.5) * tangay;
+  const tangayY = p5.randomGaussian(0, nginig) + (p5.noise(ingayX, ingayY, 100) - 0.5) * tangay;
 
   return {
-    x: tungoX * darasigan + nginigX,
-    y: tungoY * darasigan + nginigY,
+    x: tungoX * darasigan + tangayX,
+    y: tungoY * darasigan + tangayY,
   };
 }
 
@@ -634,7 +659,7 @@ function kiskis(hagibis) {
 
 function tangkangDiin() {
   const bilis = Math.hypot(hagibis.x, hagibis.y) / malapit;
-  return Math.min(1, istilo.tindiNgDiin * (1 + bilis / istilo.tigasNgDiin)) + p5.randomGaussian(0, 0.1);
+  return Math.min(1, istilo.tindiNgDiin * (1 + bilis / istilo.tigasNgDiin)) + p5.randomGaussian(0, 0.004 * malapit);
 }
 
 function lampas(punto) {

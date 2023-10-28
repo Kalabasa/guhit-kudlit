@@ -1,17 +1,23 @@
 const tl = {
   pakilala: () => "Pansalin at panlikha ng kaligrapiyang baybayin",
   tagalogNaSalita: () => "Tagalog na salita",
-  pagkakabasa: () => "Pagkakabasa",
+  tagalogBukodAngRa: () => "Tagalog (Magkabukod na 'da' at 'ra')",
+  inglesNaSalitaEksperimental: () => "Ingles na salita (eksperimental)",
+  pagkapantig: () => "Pagkapantig",
   lumikha: () => "·Lumikha·",
-  diWastongLetra: (letra) => `'Di kayang gawin itong letra/simbolo: ${letra}. Maaaring gamitin lamang ay ang abakadang Pilipino.`
+  diWastongLetra: (letra) => `'Di tiyak ang pagbaybay sa letrang: <em>${letra}</em>`,
+  paliwanagNgDiWastongLetra: (halimbawa) => `<p>Walang kasingkatumbas sa baybayin ang nasabing letra.</p><p>Pwede isulat mo muna ito sa abakadang Tagalog, parang ganito:</p><ul>${halimbawa}</ul><p>O kaya nama'y ilipat mo sa Ingles gamit ang pamalit (⏷) sa taas:</p><blockquote><label>${salin.inglesNaSalitaEksperimental()}👉 ⏷ 👈</label></blockquote>`,
 };
 
 const en = {
   pakilala: () => "Baybayin transliterator & calligraphy generator",
   tagalogNaSalita: () => "Tagalog word",
-  pagkakabasa: () => "Interpretation",
+  tagalogBukodAngRa: () => "Tagalog (Distinct 'd' and 'r')",
+  inglesNaSalitaEksperimental: () => "English word (experimental)",
+  pagkapantig: () => "Syllabication",
   lumikha: () => "·Generate·",
-  diWastongLetra: (letra) => `Can't convert this letter/symbol: ${letra}. You may only use the Pilipino alphabet (abakada).`
+  diWastongLetra: (letra) => `Can't unambiguously convert this letter: <em>${letra}</em>`,
+  paliwanagNgDiWastongLetra: (halimbawa) => `<p>There is no direct baybayin equivalent for the said letter.</p><p>You can write it first in the Tagalog alphabet (abakada), like these:</p><ul>${halimbawa}</ul><p>Or switch to English using the toggle (⏷) above:</p><blockquote><label>${salin.inglesNaSalitaEksperimental()}👉 ⏷ 👈</label></blockquote>`,
 };
 
 export const salin = typeof window !== "undefined" && /\btl\b/.test(window.location.search) ? tl : en;

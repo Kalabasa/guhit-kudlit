@@ -1,5 +1,5 @@
-import { baybayinAngPangalan } from "./pangalan.mjs";
-import { salin } from "./salin.mjs";
+import { baybayinAngIngles } from "./ingles.mjs";
+import { DiWastongLetra } from "./mali.mjs";
 
 /**
  * Baybayín ang binigay na `parirala` mula sa tinukoy na `wika`.
@@ -11,20 +11,31 @@ import { salin } from "./salin.mjs";
  *   baybayin("oo at hindi") => ["u", "u", "a", "t", "hi", "n", "di"]
  * 
  * Possibleng ibahin kung `paano` ang pagbaybay: {
- *   payak?: boolean = Kung oo, hindi gagawin ang mga sadyang salita at mga pangalan.
+ *   payak?: boolean = Kung oo, hindi gagawin ang mga sadyang salita.
+ *   ingles?: boolean = (Eksperimental) Kung oo, babasahin ang mga salita bilang Ingles.
  *   bukodAngRa?: boolean = Kung oo, hindi pag-iisahin ang 'd' at 'r'.
  * }
  */
 export function baybayin(parirala, paano = {}) {
+  parirala = parirala.normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\P{Letter}/u, " ");
+
+  const diWastongLetra = [];
+
   const mgaSalita = parirala.split(/\s+/g);
   return mgaSalita.flatMap(salita => {
     if (!salita) return [];
 
+    if (paano?.ingles) {
+      return baybayinAngIngles(salita);
+    }
     if (!paano?.payak) {
       const sinadya = baybayinKungSadyangSalita(salita);
       if (sinadya) return sinadya;
-      const pangalan = baybayinKungPangalan(salita);
-      if (pangalan) return pangalan;
+
+      // tanggalin ang pag-uulit
+      salita = salita.replace(/([^aeiou])\1+/g, "$1");
     }
 
     let mgaTitik = []; // mga titik-baybayin
@@ -63,12 +74,18 @@ export function baybayin(parirala, paano = {}) {
 
         itongTitik += letra;
       } else {
-        throw new Error(salin.diWastongLetra(letra.toUpperCase()));
+        diWastongLetra.push(letra);
       }
     }
+
+    if (diWastongLetra.length > 0) {
+      throw new DiWastongLetra(diWastongLetra);
+    }
+
     if (itongTitik) {
       mgaTitik.push(itongTitik);
     }
+
     return mgaTitik;
   });
 }
@@ -85,9 +102,4 @@ function baybayinKungSadyangSalita(salita) {
   if (salita === "ng") return ["na", "ng"];
   if (salita === "mga") return ["ma", "nga"];
   return null;
-}
-
-function baybayinKungPangalan(salita) {
-  if (salita[0].toLowerCase() === salita[0]) return null;
-  return baybayinAngPangalan(salita);
 }

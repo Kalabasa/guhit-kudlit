@@ -89,6 +89,12 @@
       text-align: start;
     }
   }
+  .gabay {
+    max-width: 30em;
+    margin: 0 0 3em;
+    padding: 0 1em;
+    box-sizing: border-box;
+  }
   form {
     position: relative;
     margin: 0;
@@ -143,7 +149,9 @@
     font-family: inherit;
     border: none;
     background: none;
-    border-bottom: solid 2px currentColor;
+    border: solid 2px currentColor;
+    border-radius: 0.5rem;
+    padding: 0 0.5rem;
     outline: none;
   }
   input:focus {
@@ -254,7 +262,7 @@
     transition-property: box-shadow, transform;
   }
   #pindutanParaLikhain:disabled {
-    filter: sepia(0.5) saturate(0.8) contrast(0.8);
+    filter: saturate(0.2) contrast(0.2) brightness(1.8);
     box-shadow: 0 0.1em 0.1em #6402;
     cursor: not-allowed;
   }
@@ -367,22 +375,27 @@
 
 <header>
   <h1>
-    <span class="pamagatUnangLinya">guhit</span><br />
-    <span class="pamagatIkalawangLinya">kudlit</span>
+    <span class="pamagatUnangLinya">Guhit</span><br />
+    <span class="pamagatIkalawangLinya">Kudlit</span>
   </h1>
   <h2 data-salin="pakilala">Baybayin transliterator & calligraphy generator</h2>
   <div class="wikaan">
-    <a href="?en">English page</a> |
-    <a href="?tl">Tagalog na pahina</a>
+    <a href="?en">English&nbsp;page</a> |
+    <a href="?tl">Tagalog&nbsp;na&nbsp;pahina</a>
   </div>
 </header>
+
+<div class="gabay" data-salin="gabay">
+  First, enter your desired word in the box. Double-check the syllabication.
+  Then press ·Generate· ! You may download the sketch after it completes.
+</div>
 
 <form id="sagutan" action="#">
   <div class="tagalog">
     <label for="salita">
-      <span id="tekstoNgPamalitSalita" data-salin="tagalogNaSalita"
-        >Tagalog word</span
-      >
+      <span id="tekstoNgPamalitSalita" data-salin="tagalogNaSalita">
+        Tagalog word
+      </span>
       <button id="pindutanNgPamalitSalita" type="button">⏷</button>
     </label>
     <input id="salita" placeholder="salita" autofocus />

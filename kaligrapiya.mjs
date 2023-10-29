@@ -267,13 +267,10 @@ export function iguhitAngKaligrapiya(baybay, kambas, paraan = {}) {
       p5.background(0xff);
       p5.push();
       p5.noStroke();
-      let tx = 0;
-      while ((tx / p5.width) * 50 < p5.height) {
-        p5.fill(253);
-        p5.textAlign(p5.CENTER);
-        p5.text(marka, tx % p5.width, Math.floor(tx / p5.width) * 50);
-        tx += 200;
-      }
+      p5.fill(128);
+      p5.textAlign(p5.CENTER, p5.BOTTOM);
+      p5.textSize(16);
+      p5.text("GuhitKudlit", p5.width / 2, p5.height - 8);
       p5.pop();
       p5.noLoop();
 
@@ -305,19 +302,19 @@ export function iguhitAngKaligrapiya(baybay, kambas, paraan = {}) {
           const posisyonNgMarka = [];
           const marka2 = marka.split("/")[0];
           for (let i = 0; i < marka2.length; i++) {
-            const x = p5.width / 2 + (i - marka2.length / 2) * 6;
+            const x = p5.width / 2 + (i - marka2.length / 2) * 7;
             posisyonNgMarka.push({ x, y: Math.max(bakodSa(x - 4), bakodSa(x + 4)) + 2 });
           }
           for (let i = 1; i < marka2.length; i++) {
-            if (posisyonNgMarka[i].y < posisyonNgMarka[i - 1].y - 6) {
-              posisyonNgMarka[i].y = posisyonNgMarka[i - 1].y - 6;
+            if (posisyonNgMarka[i].y < posisyonNgMarka[i - 1].y - 4) {
+              posisyonNgMarka[i].y = posisyonNgMarka[i - 1].y - 4;
             }
-            if (posisyonNgMarka[marka2.length - i - 1].y < posisyonNgMarka[marka2.length - i].y - 6) {
-              posisyonNgMarka[marka2.length - i - 1].y = posisyonNgMarka[marka2.length - i].y - 6;
+            if (posisyonNgMarka[marka2.length - i - 1].y < posisyonNgMarka[marka2.length - i].y - 4) {
+              posisyonNgMarka[marka2.length - i - 1].y = posisyonNgMarka[marka2.length - i].y - 4;
             }
           }
           p5.noStroke();
-          p5.fill(192);
+          p5.fill(240);
           p5.blendMode(p5.DARKEST);
           p5.textSize(9);
           for (let i = 0; i < marka2.length; i++) {

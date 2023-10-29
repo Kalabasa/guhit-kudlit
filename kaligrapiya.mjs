@@ -263,7 +263,7 @@ export function iguhitAngKaligrapiya(baybay, kambas, paraan = {}) {
     p5.setup = () => {
       p5.disableFriendlyErrors = true;
       p5.frameRate(60);
-      p5.createCanvas(kambas.width, kambas.height, kambas);
+      p5.createCanvas(1080, 1350, kambas);
       p5.background(0xff);
       p5.push();
       p5.noStroke();

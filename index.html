@@ -72,7 +72,7 @@
   .wikaan a {
     color: #aa4f00;
   }
-  @media (max-width: 600px) {
+  @media (max-width: 900px) {
     header {
       grid-template-areas:
         "pamagat wikaan wikaan"
@@ -298,7 +298,7 @@
     box-sizing: border-box;
     background: #f2eee7;
   }
-  canvas {
+  #kambas {
     margin: 2em 1em;
     width: 100% !important;
     height: auto !important;
@@ -307,6 +307,31 @@
     background: #fff;
     box-shadow: 0 0.1em 0.3em #6403;
     box-sizing: border-box;
+  }
+  #pindutanPandownload {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    padding: 0.5em;
+    font: inherit;
+    font-weight: bold;
+    font-size: 1.5em;
+    text-transform: uppercase;
+    border-radius: 0.2em;
+    background: #ca7125;
+    color: #fffef6;
+    overflow: hidden;
+    box-shadow: 0 0.1em 0.2em #6408;
+    z-index: 0;
+    transform-origin: bottom;
+    transition: none 0.04s ease-in;
+    transition-property: box-shadow, transform;
   }
 </style>
 
@@ -317,8 +342,8 @@
   </h1>
   <h2 data-salin="pakilala">Baybayin transliterator & calligraphy generator</h2>
   <div class="wikaan">
-    <a href="?en">English</a> |
-    <a href="?tl">Tagalog</a>
+    <a href="?en">English page</a> |
+    <a href="?tl">Tagalog na pahina</a>
   </div>
 </header>
 
@@ -353,7 +378,19 @@
 </form>
 
 <div class="kaligrapiya">
-  <canvas id="kambas" width="1080" height="1350" />
+  <canvas id="kambas" width="1080" height="1350"></canvas>
+  <button id="pindutanPandownload">
+    <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
+      <path
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="1.5"
+        d="M22 20.8a43 43 0 0 1-20 0M12 2v14m4.9-4.2-3.5 3.6a2 2 0 0 1-2.8 0l-3.5-3.6"
+      />
+    </svg>
+    <span data-salin="download">Download</span>
+  </button>
 </div>
 
 <script type="module" async>
@@ -373,6 +410,8 @@
   const resultangPagkapantig = document.getElementById("pagkapantig");
   const resultangBaybayin = document.getElementById("baybayin");
   const pindutanParaLikhain = document.getElementById("pindutanParaLikhain");
+  const pindutanPandownload = document.getElementById("pindutanPandownload");
+  const kambas = document.querySelector("#kambas");
 
   const mgaParaanNgSalita = [
     {
@@ -388,12 +427,16 @@
       paraan: { bukodAngRa: true },
     },
   ];
+  const mgaIstilo = "KMH";
+
   let paraanNgSalita = 0;
+  let istilo = 0;
   let baybay = [];
 
   pindutanNgPamalitSalita.addEventListener("click", palitanAngSalita);
   patlangNgSalita.addEventListener("input", isalinSaBaybayin);
   sagutan.addEventListener("submit", isulatAngKaligrapiya);
+  pindutanPandownload.addEventListener("click", idownload);
 
   async function isalinSaBaybayin() {
     const [{ baybayin }, { gawingUnicode }, { DiWastongLetra }] =
@@ -433,10 +476,20 @@
 
   async function isulatAngKaligrapiya(ganap) {
     ganap.preventDefault();
-
+    kambas.scrollIntoView({ block: "center", behavior: "smooth" });
     const { iguhitAngKaligrapiya } = await import("./kaligrapiya.mjs");
+    iguhitAngKaligrapiya(baybay, kambas, {
+      ngalanNgIstilo: mgaIstilo[istilo],
+    });
+  }
 
-    iguhitAngKaligrapiya(baybay);
+  function idownload() {
+    const a = document.createElement("a");
+    a.href = kambas.toDataURL("image/png");
+    a.download = `${patlangNgSalita.value.replace(/\W/g, "")}.png`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
   }
 
   isalinAngPahina();

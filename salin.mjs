@@ -6,7 +6,8 @@ const tl = {
   pagkapantig: () => "Pagkapantig",
   lumikha: () => "·Lumikha·",
   diWastongLetra: (letra) => `'Di tiyak ang pagbaybay sa letrang: <em>${letra}</em>`,
-  paliwanagNgDiWastongLetra: (halimbawa) => `<p>Walang kasingkatumbas sa baybayin ang nasabing letra.</p><p>Pwede isulat mo muna ito sa abakadang Tagalog, parang ganito:</p><ul>${halimbawa}</ul><p>O kaya nama'y ilipat mo sa Ingles gamit ang pamalit (⏷) sa taas:</p><blockquote><label>${salin.inglesNaSalitaEksperimental()}👉 ⏷ 👈</label></blockquote>`,
+  paliwanagNgDiWastongLetra: (halimbawa) => `<p>Walang kasingkatumbas sa baybayin ang nasabing letra.</p><p>Pwede isulat mo muna ito sa abakadang Tagalog, parang ganito:</p><ul>${halimbawa}</ul><p>O kaya nama'y ilipat mo sa Ingles na pag-input gamit ang pamalit (⏷) sa taas:</p><blockquote><label>${salin.inglesNaSalitaEksperimental()}👉 ⏷ 👈</label></blockquote>`,
+  download: () => "Nenok",
 };
 
 const en = {
@@ -17,7 +18,8 @@ const en = {
   pagkapantig: () => "Syllabication",
   lumikha: () => "·Generate·",
   diWastongLetra: (letra) => `Can't unambiguously convert this letter: <em>${letra}</em>`,
-  paliwanagNgDiWastongLetra: (halimbawa) => `<p>There is no direct baybayin equivalent for the said letter.</p><p>You can write it first in the Tagalog alphabet (abakada), like these:</p><ul>${halimbawa}</ul><p>Or switch to English using the toggle (⏷) above:</p><blockquote><label>${salin.inglesNaSalitaEksperimental()}👉 ⏷ 👈</label></blockquote>`,
+  paliwanagNgDiWastongLetra: (halimbawa) => `<p>There is no direct baybayin equivalent for the said letter.</p><p>You can write it first in the Tagalog alphabet (abakada), like these:</p><ul>${halimbawa}</ul><p>Or switch to English input using the toggle (⏷) above:</p><blockquote><label>${salin.inglesNaSalitaEksperimental()}👉 ⏷ 👈</label></blockquote>`,
+  download: () => "Download",
 };
 
 export const salin = typeof window !== "undefined" && /\btl\b/.test(window.location.search) ? tl : en;

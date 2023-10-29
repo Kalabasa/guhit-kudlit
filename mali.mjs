@@ -36,6 +36,10 @@ const mgaHalimbawangPagtitik = {
     ["Mo<del>j</del>ito", "Mo<ins>h</ins>ito"],
     ["F<del>j</del>ord", "P<ins>y</ins>ord"],
   ],
+  "q": [
+    ["<del>Q</del>ueen", "<ins>K</ins>win"],
+    ["Uni<del>q</del>ue", "Yuni<ins>k</ins>"],
+  ],
   "v": [
     ["<del>V</del>ase", "<ins>B</ins>eys"],
     ["Ali<del>v</del>e", "Alay<ins>b</ins>"],

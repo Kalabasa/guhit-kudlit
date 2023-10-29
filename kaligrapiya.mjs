@@ -141,7 +141,7 @@ const talaguhitan = {
   ],
   "r": [
     ...guhitDa,
-    [guhitTuwid, 0.5, 0.8, 0.7, 1.0, 0.0, -0.1, PUTOL],
+    [guhitTuwid, 0.3, 0.8, 0.6, 1.0, 0.1, -0.1, PUTOL],
   ],
   "s": [
     [guhitTalon, 0.0, 0.2, 0.15, 1.0, 0.1, 0.0],
@@ -165,7 +165,7 @@ const mgaIstilo = {
     tindiNgDiin: 0.002,
     tigasNgDiin: 0.001,
     lapadNgGuhit: 0.19,
-    tindiNgPaglampas: 1.0,
+    tindiNgPaglampas: 0.9,
     kapalNgPinsel: 1.0,
     hugisNgPinsel: 0.0,
     angguloNgPinsel: () => 0,
@@ -189,11 +189,10 @@ const mgaIstilo = {
     tindiNgDiin: 0.4,
     tigasNgDiin: 0.4,
     lapadNgGuhit: 0.18,
-    tindiNgPaglampas: 0.9,
+    tindiNgPaglampas: 1.1,
     kapalNgPinsel: 0.25,
     hugisNgPinsel: 0.5,
-    // angguloNgPinsel: () => Math.PI * 0.8,
-    angguloNgPinsel: (x, y) => Math.PI * 0.75 + (x + y) * (x - y) / 60,
+    angguloNgPinsel: (x, y) => Math.PI * 0.75 + (x + y) * (x - y) / 120,
     talsik: 0.95,
     tangay: 0.1,
     hagibis: ({ x, y }) => ({
@@ -219,10 +218,9 @@ const mgaIstilo = {
   },
 };
 
-const palugit = 100; // px
+let palugit = 0; // px
 const bilangNgBakod = 30;
 const palugitSaKudlit = 1.2; // p/1
-let ngalanNgIstilo = new URLSearchParams(window.location.search).get("s") ?? "K";
 let istilo = null;
 let malapit = 0; // px
 let lapadNgGuhit = 0; // px
@@ -245,181 +243,183 @@ let taposNa = () => { };
  * Ang baybay ay isang Array ng mga titik-baybayin, naka-encode sa Latin.
  *   Halimbawa, baybay = ["ku", "la", "y"]
  */
-export function iguhitAngKaligrapiya(baybay) {
-  p5.background(0xff);
+export function iguhitAngKaligrapiya(baybay, kambas, paraan = {}) {
+  const { ngalanNgIstilo, bagongPalugit } = paraan;
 
-  istilo = mgaIstilo[ngalanNgIstilo];
+  new P5((bago) => {
+    if (p5) p5.noLoop();
+    p5 = bago;
 
-  const tangkad = p5.height - palugit * 2;
-  bilangNgTitik = baybay.length;
-  tangkadNgTitik = Math.min(tangkad / bilangNgTitik, p5.height / 3) / palugitSaKudlit;
-  lapadNgTitik = tangkadNgTitik * 1.2;
-  ikailangTitik = 0;
-  lapadNgGuhit = tangkadNgTitik * istilo.lapadNgGuhit;
-  malapit = tangkadNgTitik / 20;
+    p5.setup = () => {
+      p5.disableFriendlyErrors = true;
+      p5.frameRate(60);
+      p5.createCanvas(kambas.width, kambas.height, kambas);
+      p5.background(0xff);
+      p5.noLoop();
 
-  pilaNgBaybay = [...baybay];
-  pilaNgPunto = [];
-  hulingPunto = null;
+      istilo = mgaIstilo[ngalanNgIstilo ?? "K"];
 
-  diin = 0;
-  dulo = null;
-  hagibis = { x: 0, y: 0 };
+      palugit = bagongPalugit ?? p5.height * 0.075;
+      const tangkad = p5.height - palugit * 2;
+      bilangNgTitik = baybay.length;
+      tangkadNgTitik = Math.min(tangkad / bilangNgTitik, p5.width / 1.4) / palugitSaKudlit;
+      lapadNgTitik = tangkadNgTitik * 1.2;
+      ikailangTitik = 0;
+      lapadNgGuhit = tangkadNgTitik * istilo.lapadNgGuhit;
+      malapit = tangkadNgTitik / 20;
 
-  bakod = Array(bilangNgBakod).fill(0);
+      pilaNgBaybay = [...baybay];
+      pilaNgPunto = [];
+      hulingPunto = null;
+
+      diin = 0;
+      dulo = null;
+      hagibis = { x: 0, y: 0 };
+
+      bakod = Array(bilangNgBakod).fill(0);
+    };
+
+    p5.draw = () => {
+      if (diin === 0 && pilaNgPunto.length === 0) {
+        if (pilaNgBaybay.length === 0) {
+          taposNa();
+          p5.noLoop();
+          return;
+        }
+
+        const titik = pilaNgBaybay.shift();
+        const mgaGuhit = talaguhitan[titik.replace(/(?<!^)[aiu]/, "")];
+
+        if (!mgaGuhit) throw new Error("Kulang ang talaguhitan para sa titik: " + titik);
+
+        const titikX = (p5.width - lapadNgTitik) / 2;
+
+        for (const guhit of mgaGuhit) {
+          const [paraangPagguhit, ...mgaPunto] = guhit;
+
+          const tangkadNgTitikNaMayKudlit = tangkadNgTitik * palugitSaKudlit;
+          const titikY =
+            (p5.height - bilangNgTitik * tangkadNgTitikNaMayKudlit) / 2
+            + Math.max(0, ikailangTitik - 1) * tangkadNgTitik;
+
+          const putol = mgaPunto.slice(-1)[0] === PUTOL;
+          if (putol) mgaPunto.pop();
+
+          let latag =
+            mgaPunto.slice(0, -2)
+              .map((p, i) => ilatag(titikX, titikY, p, i))
+              .concat(
+                // huling dalawang punto ay para sa hilis
+                mgaPunto.slice(-2)
+                  .map((p, i) => ilatag(0, 0, p, i))
+              );
+
+          if (latag[0] === DUGTONG || latag[1] === DUGTONG) {
+            latag[0] = pilaNgPunto[pilaNgPunto.length - 2];
+            latag[1] = pilaNgPunto[pilaNgPunto.length - 1];
+            if (latag[0] === PUTOL || latag[1] === PUTOL) throw new Error("Maling pagtala ng titik: " + titik);
+          }
+
+          pilaNgPunto.push(...paraangPagguhit(...latag));
+
+          if (putol) pilaNgPunto.push(PUTOL, PUTOL);
+
+          function ilatag(x, y, p, i) {
+            if (p === DUGTONG) return p;
+            return (i % 2) === 0 ? x + p * lapadNgTitik : y + p * tangkadNgTitik;
+          }
+        }
+
+        kudlitan(titik);
+        ihanay(pilaNgPunto, titikX, titikX + lapadNgTitik);
+
+        ikailangTitik++;
+      }
+
+      const punto = { x: pilaNgPunto[0], y: pilaNgPunto[1] };
+      const kasunodNaPunto =
+        pilaNgPunto.length > 2
+          ? { x: pilaNgPunto[2], y: pilaNgPunto[3] }
+          : null;
+      if (!hulingPunto) hulingPunto = punto;
+
+      const paputol = punto.x === PUTOL || punto.y === PUTOL;
+      if (paputol) {
+        punto.x = dulo.x + hagibis.x;
+        punto.y = dulo.y + hagibis.y;
+        let talsik = 0.9;
+        talsik += 0.06 / Math.max(1, pilaNgPunto.length - 3);
+        if (pilaNgBaybay.length === 0) {
+          talsik += 0.5 / (10 + Math.max(0, pilaNgPunto.length - 2));
+        }
+        talsik *= istilo.talsik;
+        const anggulo = Math.atan2(hagibis.y, hagibis.x);
+        const liko = Math.PI / 2;
+        const lakasNgLiko = 0.2;
+        const likoX = Math.cos(anggulo + liko) * malapit * lakasNgLiko;
+        const likoY = Math.sin(anggulo + liko) * malapit * lakasNgLiko;
+        const tulakX = likoX * Math.max(0, talsik - 1);
+        const tulakY = likoY * Math.max(0, talsik - 1);;
+        hagibis.x = hagibis.x * talsik + tulakX;
+        hagibis.y = hagibis.y * talsik + tulakY
+      }
+
+      if (diin <= 0) {
+        p5.beginShape();
+        diin = istilo.panimulangDiin;
+        dulo = punto;
+        hagibis = { x: 0, y: 0 };
+      }
+
+      let tangkangPunto = punto;
+      if (kasunodNaPunto && kasunodNaPunto.x !== PUTOL && kasunodNaPunto.y !== PUTOL) {
+        const layo = Math.hypot(dulo.x - punto.x, dulo.y - punto.y);
+        let pagsunod = 0.1 / (0.1 + layo / malapit);
+        if (paputol) {
+          pagsunod *= 0.1;
+        }
+        tangkangPunto = {
+          x: timpla(punto.x, kasunodNaPunto.x, pagsunod),
+          y: timpla(punto.y, kasunodNaPunto.y, pagsunod),
+        };
+      }
+      const darasig = darasigin(tangkangPunto, dulo);
+      hagibis.x += darasig.x;
+      hagibis.y += darasig.y;
+      const pagkiskis = kiskis(hagibis);
+      hagibis.x *= pagkiskis;
+      hagibis.y *= pagkiskis;
+      const hagibisNgIstilo = istilo.hagibis?.(hagibis) ?? hagibis;
+      dulo.x += hagibisNgIstilo.x;
+      dulo.y += hagibisNgIstilo.y;
+      const hulingDiin = diin;
+      diin =
+        paputol
+          ? Math.max(0, Math.min(1, diin - 0.008 - Math.max(0, 0.8 - diin) * 0.1))
+          : Math.max(1e-6, timpla(diin, tangkangDiin(), 0.1));
+
+      ipinta(
+        dulo.x - hagibis.x, dulo.y - hagibis.y,
+        dulo.x, dulo.y,
+        lapadNgGuhit * hulingDiin, lapadNgGuhit * diin
+      );
+
+      bakuran(dulo.x, dulo.y + lapadNgGuhit / 2);
+
+      if (paputol ? diin < 1e-6 : lampas(tangkangPunto)) {
+        hulingPunto = punto;
+        pilaNgPunto = pilaNgPunto.slice(2);
+        if (paputol) {
+          diin = 0;
+        }
+      }
+    };
+  });
 
   const pangako = new Promise(resolve => void (taposNa = resolve));
   p5.loop();
   return pangako;
 }
-
-new P5((bago) => {
-  p5 = bago;
-
-  p5.setup = () => {
-    p5.disableFriendlyErrors = true;
-    p5.frameRate(60);
-    const kambas = document.getElementById("kambas");
-    p5.createCanvas(kambas.width, kambas.height, kambas);
-    p5.noLoop();
-  };
-
-  p5.draw = () => {
-    if (diin === 0 && pilaNgPunto.length === 0) {
-      if (pilaNgBaybay.length === 0) {
-        taposNa();
-        p5.noLoop();
-        return;
-      }
-
-      const titik = pilaNgBaybay.shift();
-      const mgaGuhit = talaguhitan[titik.replace(/(?<!^)[aiu]/, "")];
-
-      if (!mgaGuhit) throw new Error("Kulang ang talaguhitan para sa titik: " + titik);
-
-      const titikX = (p5.width - lapadNgTitik) / 2;
-
-      for (const guhit of mgaGuhit) {
-        const [paraangPagguhit, ...mgaPunto] = guhit;
-
-        const tangkadNgTitikNaMayKudlit = tangkadNgTitik * palugitSaKudlit;
-        const titikY =
-          (p5.height - bilangNgTitik * tangkadNgTitikNaMayKudlit) / 2
-          + Math.max(0, ikailangTitik - 1) * tangkadNgTitik;
-
-        const putol = mgaPunto.slice(-1)[0] === PUTOL;
-        if (putol) mgaPunto.pop();
-
-        let latag =
-          mgaPunto.slice(0, -2)
-            .map((p, i) => ilatag(titikX, titikY, p, i))
-            .concat(
-              // huling dalawang punto ay para sa hilis
-              mgaPunto.slice(-2)
-                .map((p, i) => ilatag(0, 0, p, i))
-            );
-
-        if (latag[0] === DUGTONG || latag[1] === DUGTONG) {
-          latag[0] = pilaNgPunto[pilaNgPunto.length - 2];
-          latag[1] = pilaNgPunto[pilaNgPunto.length - 1];
-          if (latag[0] === PUTOL || latag[1] === PUTOL) throw new Error("Maling pagtala ng titik: " + titik);
-        }
-
-        pilaNgPunto.push(...paraangPagguhit(...latag));
-
-        if (putol) pilaNgPunto.push(PUTOL, PUTOL);
-
-        function ilatag(x, y, p, i) {
-          if (p === DUGTONG) return p;
-          return (i % 2) === 0 ? x + p * lapadNgTitik : y + p * tangkadNgTitik;
-        }
-      }
-
-      kudlitan(titik);
-      ihanay(pilaNgPunto, titikX, titikX + lapadNgTitik);
-
-      ikailangTitik++;
-    }
-
-    const punto = { x: pilaNgPunto[0], y: pilaNgPunto[1] };
-    const kasunodNaPunto =
-      pilaNgPunto.length > 2
-        ? { x: pilaNgPunto[2], y: pilaNgPunto[3] }
-        : null;
-    if (!hulingPunto) hulingPunto = punto;
-
-    const paputol = punto.x === PUTOL || punto.y === PUTOL;
-    if (paputol) {
-      punto.x = dulo.x + hagibis.x;
-      punto.y = dulo.y + hagibis.y;
-      let talsik = 0.9;
-      talsik += 0.06 / Math.max(1, pilaNgPunto.length - 3);
-      if (pilaNgBaybay.length === 0) {
-        talsik += 0.5 / (10 + Math.max(0, pilaNgPunto.length - 2));
-      }
-      talsik *= istilo.talsik;
-      const anggulo = Math.atan2(hagibis.y, hagibis.x);
-      const liko = Math.PI / 2;
-      const lakasNgLiko = 0.2;
-      const likoX = Math.cos(anggulo + liko) * malapit * lakasNgLiko;
-      const likoY = Math.sin(anggulo + liko) * malapit * lakasNgLiko;
-      const tulakX = likoX * Math.max(0, talsik - 1);
-      const tulakY = likoY * Math.max(0, talsik - 1);;
-      hagibis.x = hagibis.x * talsik + tulakX;
-      hagibis.y = hagibis.y * talsik + tulakY
-    }
-
-    if (diin <= 0) {
-      p5.beginShape();
-      diin = istilo.panimulangDiin;
-      dulo = punto;
-      hagibis = { x: 0, y: 0 };
-    }
-
-    let tangkangPunto = punto;
-    if (kasunodNaPunto && kasunodNaPunto.x !== PUTOL && kasunodNaPunto.y !== PUTOL) {
-      const layo = Math.hypot(dulo.x - punto.x, dulo.y - punto.y);
-      let pagsunod = 0.1 / (0.1 + layo / malapit);
-      if (paputol) {
-        pagsunod *= 0.1;
-      }
-      tangkangPunto = {
-        x: timpla(punto.x, kasunodNaPunto.x, pagsunod),
-        y: timpla(punto.y, kasunodNaPunto.y, pagsunod),
-      };
-    }
-    const darasig = darasigin(tangkangPunto, dulo);
-    hagibis.x += darasig.x;
-    hagibis.y += darasig.y;
-    const pagkiskis = kiskis(hagibis);
-    hagibis.x *= pagkiskis;
-    hagibis.y *= pagkiskis;
-    const hagibisNgIstilo = istilo.hagibis?.(hagibis) ?? hagibis;
-    dulo.x += hagibisNgIstilo.x;
-    dulo.y += hagibisNgIstilo.y;
-    const hulingDiin = diin;
-    diin =
-      paputol
-        ? Math.max(0, Math.min(1, diin - 0.008 - Math.max(0, 0.8 - diin) * 0.1))
-        : Math.max(1e-6, timpla(diin, tangkangDiin(), 0.1));
-
-    ipinta(
-      dulo.x - hagibis.x, dulo.y - hagibis.y,
-      dulo.x, dulo.y,
-      lapadNgGuhit * hulingDiin, lapadNgGuhit * diin
-    );
-
-    bakuran(dulo.x, dulo.y + lapadNgGuhit / 2);
-
-    if (paputol ? diin < 1e-6 : lampas(tangkangPunto)) {
-      hulingPunto = punto;
-      pilaNgPunto = pilaNgPunto.slice(2);
-      if (paputol) {
-        diin = 0;
-      }
-    }
-  };
-});
 
 function ipinta(x0, y0, x1, y1, k0, k1) {
   p5.noFill();
@@ -633,9 +633,9 @@ function darasigin(punto, dulo) {
 
   const darasigan =
     (0.012 * malapit)
-    + (0.011 * malapit)
+    + (0.020 * malapit)
     * Math.log1p(layo / malapit)
-    * Math.max(0, 3.0 * (sigmoyd((dot(tungoX, tungoY, bilisX, bilisY) - 0.7) * 6) - 0.5));
+    * Math.max(0, 2.5 * (sigmoyd((dot(tungoX, tungoY, bilisX, bilisY) - 0.7) * 6) - 0.5));
 
   const nginig = malapit * 0.006 / (1 + darasigan * 6) * istilo.tangay;
   const tangay = malapit * 0.008 * istilo.tangay;

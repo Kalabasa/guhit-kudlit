@@ -227,7 +227,7 @@ const mgaIstilo = {
 };
 
 let palugit = 0; // px
-const bilangNgBakod = 30;
+const bilangNgBakod = 40;
 const palugitSaKudlit = 1.2; // p/1
 let istilo = null;
 let malapit = 0; // px
@@ -254,6 +254,8 @@ let taposNa = () => { };
 export function iguhitAngKaligrapiya(baybay, kambas, paraan = {}) {
   const { ngalanNgIstilo, bagongPalugit } = paraan;
 
+  const marka = atob`bGVhbnJhZGEuY29tL2d1aGl0LWt1ZGxpdA==`;
+
   new P5((bago) => {
     if (p5) p5.noLoop();
     p5 = bago;
@@ -263,14 +265,24 @@ export function iguhitAngKaligrapiya(baybay, kambas, paraan = {}) {
       p5.frameRate(60);
       p5.createCanvas(kambas.width, kambas.height, kambas);
       p5.background(0xff);
+      p5.push();
+      p5.noStroke();
+      let tx = 0;
+      while ((tx / p5.width) * 50 < p5.height) {
+        p5.fill(253);
+        p5.textAlign(p5.CENTER);
+        p5.text(marka, tx % p5.width, Math.floor(tx / p5.width) * 50);
+        tx += 200;
+      }
+      p5.pop();
       p5.noLoop();
 
       istilo = mgaIstilo[ngalanNgIstilo ?? "K"];
 
-      palugit = bagongPalugit ?? p5.height * 0.075;
+      palugit = bagongPalugit ?? Math.max(p5.height, p5.width) * 0.075;
       const tangkad = p5.height - palugit * 2;
       bilangNgTitik = baybay.length;
-      tangkadNgTitik = Math.min(tangkad / bilangNgTitik, p5.width / 1.4) / palugitSaKudlit;
+      tangkadNgTitik = Math.min(tangkad / bilangNgTitik, p5.width / 2.5) / palugitSaKudlit;
       lapadNgTitik = tangkadNgTitik * 1.2;
       ikailangTitik = 0;
       lapadNgGuhit = tangkadNgTitik * istilo.lapadNgGuhit;
@@ -290,6 +302,29 @@ export function iguhitAngKaligrapiya(baybay, kambas, paraan = {}) {
     p5.draw = () => {
       if (diin === 0 && pilaNgPunto.length === 0) {
         if (pilaNgBaybay.length === 0) {
+          const posisyonNgMarka = [];
+          const marka2 = marka.split("/")[0];
+          for (let i = 0; i < marka2.length; i++) {
+            const x = p5.width / 2 + (i - marka2.length / 2) * 6;
+            posisyonNgMarka.push({ x, y: Math.max(bakodSa(x - 4), bakodSa(x + 4)) + 2 });
+          }
+          for (let i = 1; i < marka2.length; i++) {
+            if (posisyonNgMarka[i].y < posisyonNgMarka[i - 1].y - 6) {
+              posisyonNgMarka[i].y = posisyonNgMarka[i - 1].y - 6;
+            }
+            if (posisyonNgMarka[marka2.length - i - 1].y < posisyonNgMarka[marka2.length - i].y - 6) {
+              posisyonNgMarka[marka2.length - i - 1].y = posisyonNgMarka[marka2.length - i].y - 6;
+            }
+          }
+          p5.noStroke();
+          p5.fill(192);
+          p5.blendMode(p5.DARKEST);
+          p5.textSize(9);
+          for (let i = 0; i < marka2.length; i++) {
+            p5.textAlign(p5.CENTER, p5.TOP);
+            p5.text(marka2[i].toUpperCase(), posisyonNgMarka[i].x, posisyonNgMarka[i].y);
+          }
+
           taposNa();
           p5.noLoop();
           return;
@@ -411,7 +446,12 @@ export function iguhitAngKaligrapiya(baybay, kambas, paraan = {}) {
         lapadNgGuhit * hulingDiin, lapadNgGuhit * diin
       );
 
-      bakuran(dulo.x, dulo.y + lapadNgGuhit / 2);
+      const radyos = lapadNgGuhit * Math.max(hulingDiin, diin) / 2;
+      bakuran(dulo.x - radyos, dulo.y);
+      bakuran(dulo.x - radyos * Math.SQRT1_2, dulo.y + radyos * Math.SQRT1_2);
+      bakuran(dulo.x, dulo.y + radyos);
+      bakuran(dulo.x + radyos * Math.SQRT1_2, dulo.y + radyos * Math.SQRT1_2);
+      bakuran(dulo.x + radyos, dulo.y);
 
       if (paputol ? diin < 1e-6 : lampas(tangkangPunto)) {
         hulingPunto = punto;

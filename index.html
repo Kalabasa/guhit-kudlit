@@ -479,7 +479,9 @@
     kambas.scrollIntoView({ block: "center", behavior: "smooth" });
     const { iguhitAngKaligrapiya } = await import("./kaligrapiya.mjs");
     iguhitAngKaligrapiya(baybay, kambas, {
-      ngalanNgIstilo: mgaIstilo[istilo],
+      ngalanNgIstilo:
+        new URLSearchParams(window.location.search).get("s") ??
+        mgaIstilo[istilo],
     });
   }
 

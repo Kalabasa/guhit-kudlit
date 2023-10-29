@@ -133,7 +133,7 @@ const talaguhitan = {
   ],
   "ng": [
     [guhitTalon, 0.0, 0.2, 0.2, 1.0, 0.2, 0.0, PUTOL],
-    [guhitUlap, 0.35, 0.45, 1.0, 0.5, 0.0, 0.2, PUTOL],
+    [guhitUlap, 0.35, 0.45, 1.0, 0.5, 0.0, 0.15, PUTOL],
   ],
   "p": [
     ...guhitYa,
@@ -169,19 +169,23 @@ const mgaIstilo = {
     kapalNgPinsel: 1.0,
     hugisNgPinsel: 0.0,
     angguloNgPinsel: () => 0,
-    talsik: 1.00,
+    layoNgKudlit: 0.9,
+    talsik: 1.05,
+    kulotNgTalsik: 0.8,
     tangay: 1.0,
   },
   "M": { // Moderno
     panimulangDiin: 1e-6,
-    tindiNgDiin: 0.35,
-    tigasNgDiin: 0.2,
+    tindiNgDiin: 0.45,
+    tigasNgDiin: 0.4,
     lapadNgGuhit: 0.16,
     tindiNgPaglampas: 0.9,
     kapalNgPinsel: 1.0,
     hugisNgPinsel: 0.0,
     angguloNgPinsel: () => 0,
-    talsik: 0.95,
+    layoNgKudlit: 1.0,
+    talsik: 0.85,
+    kulotNgTalsik: 0.2,
     tangay: 0.8,
   },
   "H": { // Humihilis
@@ -190,14 +194,16 @@ const mgaIstilo = {
     tigasNgDiin: 0.4,
     lapadNgGuhit: 0.18,
     tindiNgPaglampas: 1.1,
-    kapalNgPinsel: 0.25,
-    hugisNgPinsel: 0.5,
-    angguloNgPinsel: (x, y) => Math.PI * 0.75 + (x + y) * (x - y) / 120,
+    kapalNgPinsel: 0.2,
+    hugisNgPinsel: 0.7,
+    angguloNgPinsel: (x, y) => Math.PI * 0.75 + (x + y) * (x - y) / (malapit * 8),
+    layoNgKudlit: 1.0,
     talsik: 0.95,
+    kulotNgTalsik: 0.6,
     tangay: 0.1,
     hagibis: ({ x, y }) => ({
-      x: x * 1.05,
-      y: y - y * Math.E ** -(malapit * 0.2 * y ** 2),
+      x: x + x * 0.05 - y * 0.1,
+      y: y - x * 0.1 + y * 0.05,
     }),
   },
   "A": { // Mala-Arabe
@@ -209,10 +215,12 @@ const mgaIstilo = {
     kapalNgPinsel: 0.25,
     hugisNgPinsel: 0.5,
     angguloNgPinsel: (x, y) => Math.PI * 0.5 + x * y / 60,
-    talsik: 1.15,
+    layoNgKudlit: 1.0,
+    talsik: 1.12,
+    kulotNgTalsik: 0.5,
     tangay: 0.2,
     hagibis: ({ x, y }) => ({
-      x: x - x * Math.E ** -(malapit * 0.016 * x ** 2),
+      x: x - x * Math.E ** -(malapit * 0.1 * x ** 2),
       y,
     }),
   },
@@ -348,16 +356,15 @@ export function iguhitAngKaligrapiya(baybay, kambas, paraan = {}) {
         punto.x = dulo.x + hagibis.x;
         punto.y = dulo.y + hagibis.y;
         let talsik = 0.9;
-        talsik += 0.06 / Math.max(1, pilaNgPunto.length - 3);
+        talsik += 0.03 / Math.max(1, pilaNgPunto.length - 3);
         if (pilaNgBaybay.length === 0) {
-          talsik += 0.5 / (10 + Math.max(0, pilaNgPunto.length - 2));
+          talsik += 0.6 / (10 + Math.max(0, pilaNgPunto.length - 2));
         }
         talsik *= istilo.talsik;
         const anggulo = Math.atan2(hagibis.y, hagibis.x);
         const liko = Math.PI / 2;
-        const lakasNgLiko = 0.2;
-        const likoX = Math.cos(anggulo + liko) * malapit * lakasNgLiko;
-        const likoY = Math.sin(anggulo + liko) * malapit * lakasNgLiko;
+        const likoX = Math.cos(anggulo + liko) * malapit * istilo.kulotNgTalsik;
+        const likoY = Math.sin(anggulo + liko) * malapit * istilo.kulotNgTalsik;
         const tulakX = likoX * Math.max(0, talsik - 1);
         const tulakY = likoY * Math.max(0, talsik - 1);;
         hagibis.x = hagibis.x * talsik + tulakX;
@@ -472,8 +479,9 @@ function ihanay(mgaPunto, kaliwaX, kananX) {
     }
   }
 
-  usogKaliwaY = Math.max(usogKaliwaY, usogKananY - tangkadNgTitik * 0.1);
-  usogKananY = Math.max(usogKananY, usogKaliwaY - tangkadNgTitik * 0.1);
+  const hilis = 0.3 + 0.6 * (1 - (ikailangTitik + 1) / bilangNgTitik);
+  usogKaliwaY = Math.max(usogKaliwaY, usogKananY - tangkadNgTitik * hilis);
+  usogKananY = Math.max(usogKananY, usogKaliwaY - tangkadNgTitik * hilis);
 
   for (let i = 0; i < mgaPunto.length; i += 2) {
     const x = mgaPunto[i];
@@ -521,7 +529,7 @@ function kudlitan(titik) {
       }
     }
 
-    const kudlitY = Math.min(timpla(ibabawY, ilalimY, 0.2), sabit.y - lapadNgGuhit * 1.2);
+    const kudlitY = Math.min(timpla(ibabawY, ilalimY, 0.2), sabit.y - lapadNgGuhit * 1.2 * istilo.layoNgKudlit);
 
     pilaNgPunto.push(
       ...guhitTuwid(
@@ -555,7 +563,7 @@ function kudlitan(titik) {
       }
     }
 
-    const kudlitY = Math.max(timpla(ibabawY, ilalimY, 0.6), sabit.y + lapadNgGuhit);
+    const kudlitY = Math.max(timpla(ibabawY, ilalimY, 0.6), sabit.y + lapadNgGuhit * istilo.layoNgKudlit);
 
     pilaNgPunto.push(
       ...guhitTuwid(

@@ -35,7 +35,7 @@ export function baybayin(parirala, paano = {}) {
       if (sinadya) return sinadya;
 
       // tanggalin ang pag-uulit
-      salita = salita.replace(/([^aeiou])\1+/g, "$1");
+      salita = salita.replace(/(ng|(?<!n)g|[^aeioug])\1+/g, "$1");
     }
 
     let mgaTitik = []; // mga titik-baybayin

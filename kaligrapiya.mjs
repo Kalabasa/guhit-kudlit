@@ -459,7 +459,18 @@ export function iguhitAngKaligrapiya(baybay, kambas, paraan = {}) {
   });
 
   const pangako = new Promise(resolve => void (taposNa = resolve));
-  p5.loop();
+
+  if (/\bvid\b/.test(window.location.search)) {
+    import("./bidyo.mjs")
+      .then(mod => mod.bidyuhan(p5))
+      .then(download => {
+        p5.loop();
+        pangako.then(() => download());
+      });
+  } else {
+    p5.loop();
+  }
+
   return pangako;
 }
 
@@ -515,7 +526,6 @@ function ihanay(mgaPunto, kaliwaX, kananX) {
   }
 
   const hilis = istilo.hilisNgHanay * (0.3 + 0.6 * (1 - (ikailangTitik + 1) / bilangNgTitik));
-  console.log(hilis);
   usogKaliwaY = Math.max(usogKaliwaY, usogKananY - tangkadNgTitik * hilis);
   usogKananY = Math.max(usogKananY, usogKaliwaY - tangkadNgTitik * hilis);
 

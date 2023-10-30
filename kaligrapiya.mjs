@@ -1,4 +1,5 @@
 import "https://cdn.jsdelivr.net/npm/p5@1.7.0/lib/p5.js";
+import { salin } from "./salin.mjs";
 const P5 = window.p5;
 let p5 = null;
 
@@ -254,7 +255,7 @@ let taposNa = () => { };
 export function iguhitAngKaligrapiya(baybay, kambas, paraan = {}) {
   const { ngalanNgIstilo, bagongPalugit } = paraan;
 
-  const marka = atob`bGVhbnJhZGEuY29tL2d1aGl0LWt1ZGxpdA==`;
+  const marka = atob`TGVhbnJhZGEuY29tL2d1aGl0LWt1ZGxpdA==`;
 
   new P5((bago) => {
     if (p5) p5.noLoop();
@@ -268,10 +269,11 @@ export function iguhitAngKaligrapiya(baybay, kambas, paraan = {}) {
       p5.background(0xff);
       p5.push();
       p5.noStroke();
-      p5.fill(128);
-      p5.textAlign(p5.CENTER, p5.BOTTOM);
+      p5.fill(192);
+      p5.textAlign(p5.RIGHT, p5.BOTTOM);
       p5.textSize(16);
-      p5.text("GuhitKudlit", p5.width / 2, p5.height - 8);
+      p5.text(salin.ginawaGamit(), p5.width - 4, p5.height - 24);
+      p5.text(marka, p5.width - 4, p5.height - 4);
       p5.pop();
       p5.noLoop();
 
@@ -303,20 +305,27 @@ export function iguhitAngKaligrapiya(baybay, kambas, paraan = {}) {
           const posisyonNgMarka = [];
           const marka2 = marka.split("/")[0];
           for (let i = 0; i < marka2.length; i++) {
-            const x = p5.width / 2 + (i - marka2.length / 2) * 7;
-            posisyonNgMarka.push({ x, y: Math.max(bakodSa(x - 4), bakodSa(x + 4)) + 2 });
+            const x = p5.width / 2 + (i - marka2.length / 2) * 8;
+            posisyonNgMarka.push({ x, y: Math.max(bakodSa(x - 4), bakodSa(x + 4)) + 3 });
           }
           for (let i = 1; i < marka2.length; i++) {
-            if (posisyonNgMarka[i].y < posisyonNgMarka[i - 1].y - 4) {
+            if (
+              posisyonNgMarka[i].y < posisyonNgMarka[i - 1].y - 4
+              && bakodSa(posisyonNgMarka[i].x) < posisyonNgMarka[i - 1].y - 24
+            ) {
               posisyonNgMarka[i].y = posisyonNgMarka[i - 1].y - 4;
             }
-            if (posisyonNgMarka[marka2.length - i - 1].y < posisyonNgMarka[marka2.length - i].y - 4) {
+            if (
+              posisyonNgMarka[marka2.length - i - 1].y < posisyonNgMarka[marka2.length - i].y - 4
+              && bakodSa(posisyonNgMarka[marka2.length - i - 1].x) < posisyonNgMarka[marka2.length - i].y - 24
+            ) {
               posisyonNgMarka[marka2.length - i - 1].y = posisyonNgMarka[marka2.length - i].y - 4;
             }
           }
           p5.noStroke();
           p5.fill(240);
           p5.blendMode(p5.DARKEST);
+          p5.textStyle(p5.BOLD);
           p5.textSize(9);
           for (let i = 0; i < marka2.length; i++) {
             p5.textAlign(p5.CENTER, p5.TOP);

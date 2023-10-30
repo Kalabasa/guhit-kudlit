@@ -9,6 +9,7 @@ const tl = {
   diWastongLetra: (letra) => `'Di tiyak ang pagbaybay sa letrang: <em>${letra}</em>`,
   paliwanagNgDiWastongLetra: (halimbawa) => `<p>Walang kasingkatumbas sa baybayin ang nasabing letra.</p><p>Pwedeng isulat mo muna ito sa abakadang Tagalog. Halimbawa:</p><ul>${halimbawa}</ul><p>O kaya nama'y ilipat mo sa Ingles na input gamit ang pamalit (⏷) sa taas:</p><blockquote><label>${salin.inglesNaSalitaEksperimental()}👉 ⏷ 👈</label></blockquote>`,
   download: () => "Nenok",
+  ginawaGamit: () => `Ginawa gamit ang GuhitKudlit`,
 };
 
 const en = {
@@ -19,9 +20,10 @@ const en = {
   inglesNaSalitaEksperimental: () => "English word (experimental)",
   pagkapantig: () => "Syllabication",
   lumikha: () => "·Generate·",
-  diWastongLetra: (letra) => `Can't unambiguously convert this letter: <em>${letra}</em>`,
-  paliwanagNgDiWastongLetra: (halimbawa) => `<p>There is no direct baybayin equivalent for the said letter.</p><p>You can write it first in the Tagalog alphabet (abakada). For example:</p><ul>${halimbawa}</ul><p>Or switch to English input using the toggle (⏷) above:</p><blockquote><label>${salin.inglesNaSalitaEksperimental()}👉 ⏷ 👈</label></blockquote>`,
+  diWastongLetra: (letter) => `Can't unambiguously convert this letter: <em>${letter}</em>`,
+  paliwanagNgDiWastongLetra: (example) => `<p>There is no direct baybayin equivalent for the said letter.</p><p>You can write it first in the Tagalog alphabet (abakada). For example:</p><ul>${example}</ul><p>Or switch to English input using the toggle (⏷) above:</p><blockquote><label>${salin.inglesNaSalitaEksperimental()}👉 ⏷ 👈</label></blockquote>`,
   download: () => "Download",
+  ginawaGamit: () => `Made with GuhitKudlit`,
 };
 
 export const salin = typeof window !== "undefined" && /\btl\b/.test(window.location.search) ? tl : en;

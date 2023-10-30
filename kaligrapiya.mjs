@@ -88,7 +88,7 @@ const guhitDa = [
 ];
 const guhitYa = [
   [guhitTalon, 0.0, 0.0, 0.2, 0.8, 0.1, 0.0],
-  [guhitAlon, DUGTONG, DUGTONG, 1.0, 0.4, 0.0, 0.05, PUTOL],
+  [guhitAlon, DUGTONG, DUGTONG, 1.0, 0.4, 0.0, 0.1, PUTOL],
 ];
 
 const talaguhitan = {
@@ -146,7 +146,7 @@ const talaguhitan = {
   ],
   "s": [
     [guhitTalon, 0.0, 0.2, 0.15, 1.0, 0.1, 0.0],
-    [guhitAlon, DUGTONG, DUGTONG, 0.7, 0.3, 0.0, 0.0],
+    [guhitAlon, DUGTONG, DUGTONG, 0.7, 0.3, 0.0, 0.1],
     [guhitIlog, DUGTONG, DUGTONG, 0.7, 1.0, 0.3, 0.0, PUTOL],
   ],
   "t": [
@@ -174,7 +174,7 @@ const mgaIstilo = {
     talsik: 1.05,
     kulotNgTalsik: 0.8,
     tangay: 1.0,
-    hilisNgHanay: 0.9,
+    hilisNgHanay: 1.2,
     lapadNgTitik: 1.2,
   },
   "M": { // Moderno
@@ -190,7 +190,7 @@ const mgaIstilo = {
     talsik: 0.85,
     kulotNgTalsik: 0.2,
     tangay: 0.8,
-    hilisNgHanay: 0.8,
+    hilisNgHanay: 1.0,
     lapadNgTitik: 1.2,
   },
   "H": { // Humihilis
@@ -210,7 +210,7 @@ const mgaIstilo = {
       x: x + x * 0.05 - y * 0.1,
       y: y - x * 0.1 + y * 0.05,
     }),
-    hilisNgHanay: 1.0,
+    hilisNgHanay: 1.4,
     lapadNgTitik: 1.2,
   },
 };

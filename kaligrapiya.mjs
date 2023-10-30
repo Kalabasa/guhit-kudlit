@@ -84,7 +84,7 @@ const PUTOL = Symbol("putol");
 const guhitDa = [
   [guhitTalon, 0.0, 0.0, 0.1, 0.7, 0.1, 0.0],
   [guhitAlon, DUGTONG, DUGTONG, 1.0, 0.8, 0.0, 0.12, PUTOL],
-  [guhitAlon, 0.15, 0.1, 1.0, 0.2, 0.0, 0.12, PUTOL],
+  [guhitAlon, 0.15, 0.05, 1.0, 0.2, 0.0, 0.12, PUTOL],
 ];
 const guhitYa = [
   [guhitTalon, 0.0, 0.0, 0.2, 0.8, 0.1, 0.0],
@@ -115,7 +115,7 @@ const talaguhitan = {
   "d": guhitDa,
   "g": [
     [guhitIlog, 0.0, 0.1, 0.0, 0.9, 0.4, 0.0, PUTOL],
-    [guhitTalon, 0.4, 0.2, 1.1, 0.8, 0.2, 0.0, PUTOL],
+    [guhitTalon, 0.42, 0.2, 1.1, 0.8, 0.2, 0.0, PUTOL],
   ],
   "h": [
     [guhitAlon, 0.0, 0.5, 1.0, 0.5, 0.0, 0.15, PUTOL],
@@ -174,6 +174,8 @@ const mgaIstilo = {
     talsik: 1.05,
     kulotNgTalsik: 0.8,
     tangay: 1.0,
+    hilisNgHanay: 0.9,
+    lapadNgTitik: 1.2,
   },
   "M": { // Moderno
     panimulangDiin: 1e-6,
@@ -188,6 +190,8 @@ const mgaIstilo = {
     talsik: 0.85,
     kulotNgTalsik: 0.2,
     tangay: 0.8,
+    hilisNgHanay: 0.8,
+    lapadNgTitik: 1.2,
   },
   "H": { // Humihilis
     panimulangDiin: 0.2,
@@ -206,24 +210,8 @@ const mgaIstilo = {
       x: x + x * 0.05 - y * 0.1,
       y: y - x * 0.1 + y * 0.05,
     }),
-  },
-  "A": { // Mala-Arabe
-    panimulangDiin: 0.4,
-    tindiNgDiin: 0.4,
-    tigasNgDiin: 0.4,
-    lapadNgGuhit: 0.17,
-    tindiNgPaglampas: 1.7,
-    kapalNgPinsel: 0.25,
-    hugisNgPinsel: 0.5,
-    angguloNgPinsel: (x, y) => Math.PI * 0.5 + x * y / 60,
-    layoNgKudlit: 1.0,
-    talsik: 1.12,
-    kulotNgTalsik: 0.5,
-    tangay: 0.2,
-    hagibis: ({ x, y }) => ({
-      x: x - x * Math.E ** -(malapit * 0.1 * x ** 2),
-      y,
-    }),
+    hilisNgHanay: 1.0,
+    lapadNgTitik: 1.2,
   },
 };
 
@@ -282,8 +270,8 @@ export function iguhitAngKaligrapiya(baybay, kambas, paraan = {}) {
       palugit = bagongPalugit ?? Math.max(p5.height, p5.width) * 0.075;
       const tangkad = p5.height - palugit * 2;
       bilangNgTitik = baybay.length;
-      tangkadNgTitik = Math.min(tangkad / bilangNgTitik, p5.width / 2.5) / palugitSaKudlit;
-      lapadNgTitik = tangkadNgTitik * 1.2;
+      tangkadNgTitik = Math.min(tangkad / bilangNgTitik, p5.width / (istilo.lapadNgTitik * 2)) / palugitSaKudlit;
+      lapadNgTitik = tangkadNgTitik * istilo.lapadNgTitik;
       ikailangTitik = 0;
       lapadNgGuhit = tangkadNgTitik * istilo.lapadNgGuhit;
       malapit = tangkadNgTitik / 20;
@@ -526,7 +514,8 @@ function ihanay(mgaPunto, kaliwaX, kananX) {
     }
   }
 
-  const hilis = 0.3 + 0.6 * (1 - (ikailangTitik + 1) / bilangNgTitik);
+  const hilis = istilo.hilisNgHanay * (0.3 + 0.6 * (1 - (ikailangTitik + 1) / bilangNgTitik));
+  console.log(hilis);
   usogKaliwaY = Math.max(usogKaliwaY, usogKananY - tangkadNgTitik * hilis);
   usogKananY = Math.max(usogKananY, usogKaliwaY - tangkadNgTitik * hilis);
 

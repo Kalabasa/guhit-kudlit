@@ -19,7 +19,7 @@ import { DiWastongLetra } from "./mali.mjs";
 export function baybayin(parirala, paano = {}) {
   parirala = parirala.normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
-    .replace(/\P{Letter}/u, " ");
+    .replace(/\P{Letter}|\p{Symbol}/u, " ");
 
   const diWastongLetra = [];
 
@@ -55,8 +55,6 @@ export function baybayin(parirala, paano = {}) {
           if (hulingTitik !== letra) {
             if ("ie".includes(hulingTitik)) {
               itongTitik = "y";
-            } else if ("ou".includes(hulingTitik)) {
-              itongTitik = "w";
             }
           }
         }

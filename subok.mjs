@@ -13,6 +13,7 @@ dapat(baybayin("kailan")).ay(["ka", "i", "la", "n"]);
 dapat(baybayin("baon")).ay(["ba", "u", "n"]);
 dapat(baybayin("baul")).ay(["ba", "u", "l"]);
 dapat(baybayin("kain")).ay(["ka", "i", "n"]);
+dapat(baybayin("upuan")).ay(["u", "pu", "a", "n"]);
 
 // Di normal na baybay
 dapat(baybayin("tilapia")).ay(["ti", "la", "pi", "ya"]);

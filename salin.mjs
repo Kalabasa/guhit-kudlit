@@ -1,6 +1,6 @@
 const tl = {
-  pakilala: () => "Pansalin at panlikha ng kaligrapiyang baybayin",
-  gabay: () => `<strong>GABAY</strong> &mdash; Una, isulat ang iyong nais na salita sa kahon. Tiyaking tama ang pagkapantig. Tapos, pindutin ang ${salin.lumikha().toUpperCase()} ! Pwede mong i-download ang dibuho pagkatapos nitong mabuo.`,
+  pakilala: () => "Pansalin at panlikha ng kaligrapiyang baybayin 🖌️",
+  gabay: () => `<strong>GABAY</strong> &mdash; Una, isulat ang iyong nais na salita sa kahon. Tiyaking tama ang pagkapantig. Tapos, pindutin ang <em>${salin.lumikha().toUpperCase()}</em> ! Pwede mong i-download ang dibuho pagkatapos nitong mabuo.`,
   tagalogNaSalita: () => "Tagalog na salita",
   tagalogBukodAngRa: () => "Tagalog (Magkabukod na 'da' at 'ra')",
   inglesNaSalitaEksperimental: () => "Ingles na salita (eksperimental)",
@@ -12,8 +12,8 @@ const tl = {
 };
 
 const en = {
-  pakilala: () => "Baybayin transliterator & calligraphy generator",
-  gabay: () => `<strong>GUIDE</strong> &mdash; First, enter your desired word in the box. Double-check the syllabication. Then press ${salin.lumikha().toUpperCase()}! You may download the sketch after it completes.`,
+  pakilala: () => "Baybayin transliterator & calligraphy generator 🖌️",
+  gabay: () => `<strong>GUIDE</strong> &mdash; First, enter your desired word in the box. Double-check the syllabication. Then press <em>${salin.lumikha().toUpperCase()}</em> ! You may download the sketch after it completes.`,
   tagalogNaSalita: () => "Tagalog word",
   tagalogBukodAngRa: () => "Tagalog (Distinct 'd' and 'r')",
   inglesNaSalitaEksperimental: () => "English word (experimental)",

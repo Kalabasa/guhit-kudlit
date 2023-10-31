@@ -100,16 +100,6 @@
       text-align: start;
     }
   }
-  .gabay {
-    max-width: 28em;
-    margin: 0 1em 3em;
-    padding: 0.5em;
-    box-sizing: border-box;
-    border: solid 1px currentColor;
-    border-radius: 0.5em;
-    background: #ecfcec;
-    color: #2d602d;
-  }
   form {
     position: relative;
     margin: 0;
@@ -400,18 +390,13 @@
   </div>
 </header>
 
-<div class="gabay" data-salin="gabay">
-  First, enter your desired word in the box. Double-check the syllabication.
-  Then press ·Generate· ! You may download the sketch after it completes.
-</div>
-
 <form id="sagutan" action="#">
   <div class="tagalog">
     <label for="salita">
       <span id="tekstoNgPamalitSalita" data-salin="tagalogNaSalita">
         Tagalog word
       </span>
-      <button id="pindutanNgPamalitSalita" type="button">⏷</button>
+      <button id="pindutanNgPamalitSalita" type="button">▾</button>
     </label>
     <input id="salita" placeholder="salita" autofocus />
     <div id="mali" hidden>

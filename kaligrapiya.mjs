@@ -560,22 +560,23 @@ function kudlitan(titik) {
   }
 
   const hakbang = lapadNgGuhit * 0.2;
+  const palugitNgKudlitX = lapadNgGuhit * 1.0;
 
   if (patinig === "i") {
-    const kudlitX = kaliwaX + lapadNgTitik * 0.4;
+    const kudlitX = kaliwaX + lapadNgTitik * 0.3;
 
     let sabit = null;
     let antasNgSabit = Infinity;
     for (const p of sundin(pilaNgPunto, hakbang)) {
-      if (Math.abs(p.x - kudlitX) > lapadNgGuhit * 1.5) continue;
-      const antasNito = Math.abs(p.x - kudlitX) + (p.y - ilalimY);
+      if (Math.abs(p.x - kudlitX) > palugitNgKudlitX) continue;
+      const antasNito = Math.abs(p.x - kudlitX) * 0.5 + (p.y - ilalimY);
       if (antasNito < antasNgSabit) {
         sabit = { x: p.x, y: p.y };
         antasNgSabit = antasNito;
       }
     }
 
-    const kudlitY = Math.min(timpla(ibabawY, ilalimY, 0.2), sabit.y - lapadNgGuhit * 1.2 * istilo.layoNgKudlit);
+    const kudlitY = Math.min(timpla(ibabawY, ilalimY, 0.2), sabit.y - lapadNgGuhit * istilo.layoNgKudlit);
 
     pilaNgPunto.push(
       ...guhitTuwid(
@@ -601,8 +602,8 @@ function kudlitan(titik) {
     let sabit = null;
     let antasNgSabit = Infinity;
     for (const p of sundin(pilaNgPunto, hakbang)) {
-      if (Math.abs(p.x - kudlitX) > lapadNgGuhit * 1.5) continue;
-      const antasNito = Math.abs(p.x - kudlitX) + (ibabawY - p.y) * 2;
+      if (Math.abs(p.x - kudlitX) > palugitNgKudlitX) continue;
+      const antasNito = Math.abs(p.x - kudlitX) * 0.5 + (ibabawY - p.y);
       if (antasNito < antasNgSabit) {
         sabit = { x: p.x, y: p.y };
         antasNgSabit = antasNito;

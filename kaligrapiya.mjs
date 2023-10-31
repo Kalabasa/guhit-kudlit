@@ -173,7 +173,7 @@ const mgaIstilo = {
     layoNgKudlit: 0.9,
     talsik: 1.05,
     kulotNgTalsik: 0.8,
-    tangay: 1.0,
+    tangay: 1.6,
     hilisNgHanay: 1.2,
     lapadNgTitik: 1.2,
   },
@@ -677,10 +677,16 @@ function* sundin(mgaPunto, hakbang) {
 }
 
 function darasigin(punto, dulo) {
+  const tangay = malapit * 0.3 * istilo.tangay;
+  const ingayX = dulo.x * malapit / 3e3;
+  const ingayY = dulo.y * malapit / 3e3;
+  const tangayX = (p5.noise(ingayX, ingayY, 0) - 0.5) * tangay;
+  const tangayY = (p5.noise(ingayX, ingayY, 100) - 0.5) * tangay;
+
   const layo = Math.hypot(punto.x - dulo.x, punto.y - dulo.y);
   if (layo === 0) return { x: 0, y: 0 };
-  const tungoX = (punto.x - dulo.x) / layo;
-  const tungoY = (punto.y - dulo.y) / layo;
+  const tungoX = (punto.x + tangayX - dulo.x) / layo;
+  const tungoY = (punto.y + tangayY - dulo.y) / layo;
 
   const bilis = Math.hypot(hagibis.x, hagibis.y);
   const bilisX = bilis === 0 ? 0 : hagibis.x / bilis;
@@ -692,16 +698,13 @@ function darasigin(punto, dulo) {
     * Math.log1p(layo / malapit)
     * Math.max(0, 2.5 * (sigmoyd((dot(tungoX, tungoY, bilisX, bilisY) - 0.7) * 6) - 0.5));
 
-  const nginig = malapit * 0.006 / (1 + darasigan * 6) * istilo.tangay;
-  const tangay = malapit * 0.008 * istilo.tangay;
-  const ingayX = dulo.x * malapit / 1e4;
-  const ingayY = dulo.y * malapit / 1e4;
-  const tangayX = p5.randomGaussian(0, nginig) + (p5.noise(ingayX, ingayY, 0) - 0.5) * tangay;
-  const tangayY = p5.randomGaussian(0, nginig) + (p5.noise(ingayX, ingayY, 100) - 0.5) * tangay;
-
-  return {
-    x: tungoX * darasigan + tangayX,
-    y: tungoY * darasigan + tangayY,
+    const nginig = malapit * 0.006 / (1 + darasigan * 6) * istilo.tangay;
+    const nginigX = p5.randomGaussian(0, nginig);
+    const nginigY = p5.randomGaussian(0, nginig);
+  
+    return {
+    x: tungoX * darasigan + nginigX,
+    y: tungoY * darasigan + nginigY,
   };
 }
 

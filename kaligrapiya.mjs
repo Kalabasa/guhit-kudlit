@@ -31,7 +31,7 @@ function guhitIlog(x0, y0, x1, y1, hx, hy) {
     timpla(x0, x1, 0.35) + hx * 0.5, timpla(y0, y1, 0.35),
     timpla(x0, x1, 0.4) + hx * 0.8, timpla(y0, y1, 0.4),
     timpla(x0, x1, 0.8) + hx * 0.7, timpla(y0, y1, 0.8),
-    x1 + hx * 0.2, y1
+    x1, y1
   ];
 }
 // ω

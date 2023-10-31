@@ -126,7 +126,7 @@ const talaguhitan = {
   ],
   "m": [
     ...guhitYa,
-    [guhitTuwid, 0.2, 0.5, 0.65, 0.5, 0.05, -0.05, PUTOL],
+    [guhitTuwid, 0.2, 0.5, 0.75, 0.5, 0.05, -0.05, PUTOL],
   ],
   "n": [
     [guhitBundok, 0.0, 0.8, 0.5, 0.2, 1.0, 0.8, 0.1, 0.1, PUTOL],
@@ -151,7 +151,7 @@ const talaguhitan = {
   ],
   "t": [
     [guhitAlon, 0.0, 0.6, 1.0, 0.4, 0.0, 0.1, PUTOL],
-    [guhitTuwid, 0.8, 0.35, 0.5, 1.0, -0.12, -0.15, PUTOL],
+    [guhitTuwid, 0.8, 0.35, 0.45, 1.0, -0.12, -0.04, PUTOL],
   ],
   "w": [
     [guhitTalon, 0.0, 0.0, 0.2, 0.8, 0.1, 0.0],

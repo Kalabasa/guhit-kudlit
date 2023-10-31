@@ -3,11 +3,17 @@
 <link rel="icon" href="./favicon.png" />
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta property="og:type" content="website">
-<meta property="og:title" content="Guhit Kudlit">
-<meta property="og:url" content="https://leanrada.com/guhit-kudlit/">
-<meta property="og:image" content="https://leanrada.com/guhit-kudlit/pakita.png">
-<meta property="og:description" content="Baybayin calligraphy generator and transliterator!">
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Guhit Kudlit" />
+<meta property="og:url" content="https://leanrada.com/guhit-kudlit/" />
+<meta
+  property="og:image"
+  content="https://leanrada.com/guhit-kudlit/pakita.png"
+/>
+<meta
+  property="og:description"
+  content="Baybayin calligraphy generator and transliterator!"
+/>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -383,7 +389,9 @@
     <span class="pamagatUnangLinya">Guhit</span><br />
     <span class="pamagatIkalawangLinya">Kudlit</span>
   </h1>
-  <h2 data-salin="pakilala">Baybayin transliterator & calligraphy generator 🖌️</h2>
+  <h2 data-salin="pakilala">
+    Baybayin transliterator & calligraphy generator 🖌️
+  </h2>
   <div class="wikaan">
     <a href="?en">English&nbsp;page</a> |
     <a href="?tl">Tagalog&nbsp;na&nbsp;pahina</a>
@@ -536,11 +544,13 @@
 
   function idownload() {
     const a = document.createElement("a");
-    a.href = kambas.toDataURL("image/png");
+    const url = kambas.toDataURL("image/png");
+    a.href = url;
     a.download = `${patlangNgSalita.value.replace(/\W/g, "")}.png`;
     document.body.appendChild(a);
     a.click();
-    a.remove();
+    URL.revokeObjectURL(url);
+    setTimeout(() => a.remove());
   }
 
   isalinAngPahina();

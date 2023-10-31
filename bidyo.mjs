@@ -20,6 +20,9 @@ export async function bidyuhan(p5) {
   }
 
   return () => {
+    for (let i = 0; i < 60 * 1.0; i++) {
+      ccapture.capture(p5.canvas);
+    }
     ccapture.stop();
     ccapture.save((blob) => {
       const a = document.createElement("a");

@@ -68,8 +68,9 @@ function guhitTuwid(x0, y0, x1, y1, hx, hy) {
 function guhitSaWa(x0, y0, x1, y1, hx, hy) {
   return [
     x0, y0,
+    x0 + hx * 0.2, y0 + hy,
     x0 + hx * 0.9, y0,
-    timpla(x0, x1, 0.5) + hx, timpla(y0, y1, 0.5),
+    timpla(x0, x1, 0.5) + hx, timpla(y0, y1, 0.5) - hy,
     x1, y1
   ];
 }
@@ -155,7 +156,7 @@ const talaguhitan = {
   ],
   "w": [
     [guhitTalon, 0.0, 0.0, 0.2, 0.8, 0.1, 0.0],
-    [guhitSaWa, DUGTONG, DUGTONG, 0.8, 0.0, 0.4, 0.0, PUTOL],
+    [guhitSaWa, DUGTONG, DUGTONG, 0.8, 0.0, 0.4, 0.1, PUTOL],
   ],
   "y": guhitYa,
 };
@@ -560,7 +561,7 @@ function kudlitan(titik) {
   }
 
   const hakbang = lapadNgGuhit * 0.2;
-  const palugitNgKudlitX = lapadNgGuhit * 1.0;
+  const palugitNgKudlitX = lapadNgGuhit * 1.1;
 
   if (patinig === "i") {
     const kudlitX = kaliwaX + lapadNgTitik * 0.3;

@@ -312,7 +312,7 @@ export function iguhitAngKaligrapiya(baybay, kambas, paraan = {}) {
             }
           }
           p5.noStroke();
-          p5.fill(240);
+          p5.fill(248);
           p5.blendMode(p5.DARKEST);
           p5.textStyle(p5.BOLD);
           p5.textSize(9);

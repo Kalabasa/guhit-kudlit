@@ -400,6 +400,12 @@ export function iguhitAngKaligrapiya(baybay, kambas, paraan = {}) {
         const tulakY = likoY * Math.max(0, talsik - 1);;
         hagibis.x = hagibis.x * talsik + tulakX;
         hagibis.y = hagibis.y * talsik + tulakY
+      } else {
+        const tangay = malapit * 2 * istilo.tangay;
+        const ingayX = punto.x * malapit / 3e3;
+        const ingayY = punto.y * malapit / 3e3;
+        punto.x += (p5.noise(ingayX, ingayY, 0) - 0.5) * tangay;
+        punto.y += (p5.noise(ingayX, ingayY, 100) - 0.5) * tangay;
       }
 
       if (diin <= 0) {
@@ -540,7 +546,7 @@ function ihanay(mgaPunto, kaliwaX, kananX) {
 }
 
 function kudlitan(titik) {
-  const katinig = titik.match(/[^aiu]/)?.[0];
+  const katinig = titik.match(/[^aiu]+/)?.[0];
   if (!katinig) return;
 
   const patinig = titik.match(/[aiu]/)?.[0];
@@ -561,10 +567,28 @@ function kudlitan(titik) {
   }
 
   const hakbang = lapadNgGuhit * 0.2;
-  const palugitNgKudlitX = lapadNgGuhit * 1.1;
+  const palugitNgKudlitX = lapadNgGuhit * 1.0;
 
   if (patinig === "i") {
-    const kudlitX = kaliwaX + lapadNgTitik * 0.3;
+    let kudlitX = kaliwaX;
+    switch (katinig) {
+      case "g":
+      case "ng":
+        kudlitX += lapadNgTitik * 0.5;
+        break;
+      case "s":
+        kudlitX += lapadNgTitik * 0.35;
+        break;
+      case "m":
+      case "p":
+      case "w":
+      case "y":
+        kudlitX += lapadNgTitik * 0.4;
+        break;
+      default:
+        kudlitX += lapadNgTitik * 0.3;
+        break;
+    }
 
     let sabit = null;
     let antasNgSabit = Infinity;
@@ -596,7 +620,7 @@ function kudlitan(titik) {
       case "s":
         break;
       default:
-        kudlitX -= lapadNgTitik * 0.15
+        kudlitX -= lapadNgTitik * 0.15;
         break;
     }
 
@@ -678,16 +702,10 @@ function* sundin(mgaPunto, hakbang) {
 }
 
 function darasigin(punto, dulo) {
-  const tangay = malapit * 0.3 * istilo.tangay;
-  const ingayX = dulo.x * malapit / 3e3;
-  const ingayY = dulo.y * malapit / 3e3;
-  const tangayX = (p5.noise(ingayX, ingayY, 0) - 0.5) * tangay;
-  const tangayY = (p5.noise(ingayX, ingayY, 100) - 0.5) * tangay;
-
   const layo = Math.hypot(punto.x - dulo.x, punto.y - dulo.y);
   if (layo === 0) return { x: 0, y: 0 };
-  const tungoX = (punto.x + tangayX - dulo.x) / layo;
-  const tungoY = (punto.y + tangayY - dulo.y) / layo;
+  const tungoX = (punto.x - dulo.x) / layo;
+  const tungoY = (punto.y - dulo.y) / layo;
 
   const bilis = Math.hypot(hagibis.x, hagibis.y);
   const bilisX = bilis === 0 ? 0 : hagibis.x / bilis;
@@ -699,11 +717,11 @@ function darasigin(punto, dulo) {
     * Math.log1p(layo / malapit)
     * Math.max(0, 2.5 * (sigmoyd((dot(tungoX, tungoY, bilisX, bilisY) - 0.7) * 6) - 0.5));
 
-    const nginig = malapit * 0.006 / (1 + darasigan * 6) * istilo.tangay;
-    const nginigX = p5.randomGaussian(0, nginig);
-    const nginigY = p5.randomGaussian(0, nginig);
-  
-    return {
+  const nginig = malapit * 0.006 / (1 + darasigan * 6) * istilo.tangay;
+  const nginigX = p5.randomGaussian(0, nginig);
+  const nginigY = p5.randomGaussian(0, nginig);
+
+  return {
     x: tungoX * darasigan + nginigX,
     y: tungoY * darasigan + nginigY,
   };

@@ -203,7 +203,7 @@ const mgaIstilo = {
     kapalNgPinsel: 0.2,
     hugisNgPinsel: 0.7,
     angguloNgPinsel: (x, y) => Math.PI * 0.75 + (x + y) * (x - y) / (malapit * 8),
-    layoNgKudlit: 1.0,
+    layoNgKudlit: 1.1,
     talsik: 0.95,
     kulotNgTalsik: 0.6,
     tangay: 0.1,
@@ -332,14 +332,13 @@ export function iguhitAngKaligrapiya(baybay, kambas, paraan = {}) {
         if (!mgaGuhit) throw new Error("Kulang ang talaguhitan para sa titik: " + titik);
 
         const titikX = (p5.width - lapadNgTitik) / 2;
+        const tangkadNgTitikNaMayKudlit = tangkadNgTitik * palugitSaKudlit;
+        const titikY =
+          (p5.height - bilangNgTitik * tangkadNgTitikNaMayKudlit) / 2
+          + Math.max(0, ikailangTitik - 1) * tangkadNgTitik;
 
         for (const guhit of mgaGuhit) {
           const [paraangPagguhit, ...mgaPunto] = guhit;
-
-          const tangkadNgTitikNaMayKudlit = tangkadNgTitik * palugitSaKudlit;
-          const titikY =
-            (p5.height - bilangNgTitik * tangkadNgTitikNaMayKudlit) / 2
-            + Math.max(0, ikailangTitik - 1) * tangkadNgTitik;
 
           const putol = mgaPunto.slice(-1)[0] === PUTOL;
           if (putol) mgaPunto.pop();
@@ -370,6 +369,8 @@ export function iguhitAngKaligrapiya(baybay, kambas, paraan = {}) {
         }
 
         kudlitan(titik);
+        const gitna = { x: titikX + lapadNgTitik / 2, y: titikY + tangkadNgTitik / 2 };
+        if (istilo.pilter) pilterin(pilaNgPunto, gitna, istilo.pilter);
         ihanay(pilaNgPunto, titikX, titikX + lapadNgTitik);
 
         ikailangTitik++;
@@ -508,6 +509,16 @@ function ipinta(x0, y0, x1, y1, k0, k1) {
     x1 + x * 1 * k1 * istilo.hugisNgPinsel,
     y1 + y * 1 * k1 * istilo.hugisNgPinsel
   );
+}
+
+function pilterin(mgaPunto, gitna, pilter) {
+  for (let i = 0; i < mgaPunto.length; i += 2) {
+    let punto = { x: mgaPunto[i], y: mgaPunto[i + 1] };
+    if (punto.x === PUTOL || punto.y === PUTOL) continue;
+    punto = pilter(punto, gitna);
+    mgaPunto[i] = punto.x;
+    mgaPunto[i + 1] = punto.y;
+  }
 }
 
 function ihanay(mgaPunto, kaliwaX, kananX) {

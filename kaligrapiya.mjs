@@ -168,8 +168,9 @@ const mgaIstilo = {
     tigasNgDiin: 0.001,
     lapadNgGuhit: 0.19,
     tindiNgPaglampas: 0.9,
-    kapalNgPinsel: 1.0,
     hugisNgPinsel: 0.0,
+    bilangNgHibla: 1,
+    kapalNgHibla: (hibla, k) => k,
     angguloNgPinsel: () => 0,
     layoNgKudlit: 0.9,
     talsik: 1.05,
@@ -178,14 +179,32 @@ const mgaIstilo = {
     hilisNgHanay: 1.2,
     lapadNgTitik: 1.2,
   },
+  "P": { // Pinsel
+    panimulangDiin: 1e-6,
+    tindiNgDiin: 0.2,
+    tigasNgDiin: 0.1,
+    lapadNgGuhit: 0.22,
+    tindiNgPaglampas: 1.2,
+    hugisNgPinsel: 0.0,
+    bilangNgHibla: 60,
+    kapalNgHibla: (hibla, k) => Math.min(k, Math.log1p(k) * 0.2 + 0.1 * hibla.r * lapadNgGuhit),
+    angguloNgPinsel: (x, y) => Math.PI * 0.75 + (x + y) * (x - y) / (malapit * 4),
+    layoNgKudlit: 1.0,
+    talsik: 1.00,
+    kulotNgTalsik: 0.8,
+    tangay: 2.0,
+    hilisNgHanay: 1.6,
+    lapadNgTitik: 1.6,
+  },
   "M": { // Moderno
     panimulangDiin: 1e-6,
     tindiNgDiin: 0.45,
     tigasNgDiin: 0.4,
     lapadNgGuhit: 0.16,
     tindiNgPaglampas: 0.9,
-    kapalNgPinsel: 1.0,
     hugisNgPinsel: 0.0,
+    bilangNgHibla: 1,
+    kapalNgHibla: (hibla, k) => k,
     angguloNgPinsel: () => 0,
     layoNgKudlit: 1.0,
     talsik: 0.85,
@@ -200,8 +219,9 @@ const mgaIstilo = {
     tigasNgDiin: 0.4,
     lapadNgGuhit: 0.18,
     tindiNgPaglampas: 1.1,
-    kapalNgPinsel: 0.2,
     hugisNgPinsel: 0.7,
+    bilangNgHibla: 1,
+    kapalNgHibla: (hibla, k) => k * 0.2,
     angguloNgPinsel: (x, y) => Math.PI * 0.75 + (x + y) * (x - y) / (malapit * 8),
     layoNgKudlit: 1.1,
     talsik: 0.95,
@@ -222,6 +242,7 @@ const palugitSaKudlit = 1.2; // p/1
 let istilo = null;
 let malapit = 0; // px
 let lapadNgGuhit = 0; // px
+let mgaHibla = []; // [{ x: n, y: n, s: n }]
 let lapadNgTitik = 0; // px
 let tangkadNgTitik = 0; // px
 let bilangNgTitik = 0;
@@ -411,6 +432,7 @@ export function iguhitAngKaligrapiya(baybay, kambas, paraan = {}) {
 
       if (diin <= 0) {
         p5.beginShape();
+        mgaHibla = gumawaNgMgaHibla();
         diin = istilo.panimulangDiin;
         dulo = punto;
         hagibis = { x: 0, y: 0 };
@@ -482,33 +504,37 @@ export function iguhitAngKaligrapiya(baybay, kambas, paraan = {}) {
   return pangako;
 }
 
+function gumawaNgMgaHibla() {
+  const mgaHibla = [];
+  for (let i = 0; i < istilo.bilangNgHibla; i++) {
+    const a = Math.PI * 2 * Math.random();
+    const l = Math.sqrt(Math.random());
+    mgaHibla.push({
+      x: Math.cos(a) * l,
+      y: Math.sin(a) * l,
+      r: Math.random(),
+    });
+  }
+  return mgaHibla;
+}
+
 function ipinta(x0, y0, x1, y1, k0, k1) {
   p5.noFill();
   p5.stroke(0);
-  p5.strokeWeight(timpla(k0, k1, 0.5) * istilo.kapalNgPinsel);
   const anggulo = istilo.angguloNgPinsel(x1 - x0, y1 - y0);
-  const x = Math.cos(anggulo);
-  const y = Math.sin(anggulo);
-  for (let i = -1; i <= 1; i += 0.5) {
+  const kapal = timpla(k0, k1, 0.5);
+  for (const hibla of mgaHibla) {
+    const kapalNgHibla = istilo.kapalNgHibla(hibla, kapal);
+    p5.strokeWeight(kapalNgHibla);
+    const x = Math.cos(anggulo) * hibla.x - Math.sin(anggulo) * hibla.y;
+    const y = Math.sin(anggulo) * hibla.x + Math.cos(anggulo) * hibla.y;
     p5.line(
-      x0 + x * i * k0 * istilo.hugisNgPinsel,
-      y0 + y * i * k0 * istilo.hugisNgPinsel,
-      x1 + x * i * k1 * istilo.hugisNgPinsel,
-      y1 + y * i * k1 * istilo.hugisNgPinsel
+      x0 + x * Math.max(0, (k0 - kapalNgHibla) / 2),
+      y0 + y * Math.max(0, (k0 - kapalNgHibla) / 2),
+      x1 + x * Math.max(0, (k1 - kapalNgHibla) / 2),
+      y1 + y * Math.max(0, (k1 - kapalNgHibla) / 2),
     );
   }
-  p5.line(
-    x0 + x * -1 * k0 * istilo.hugisNgPinsel,
-    y0 + y * -1 * k0 * istilo.hugisNgPinsel,
-    x0 + x * 1 * k0 * istilo.hugisNgPinsel,
-    y0 + y * 1 * k0 * istilo.hugisNgPinsel
-  );
-  p5.line(
-    x1 + x * -1 * k1 * istilo.hugisNgPinsel,
-    y1 + y * -1 * k1 * istilo.hugisNgPinsel,
-    x1 + x * 1 * k1 * istilo.hugisNgPinsel,
-    y1 + y * 1 * k1 * istilo.hugisNgPinsel
-  );
 }
 
 function pilterin(mgaPunto, gitna, pilter) {

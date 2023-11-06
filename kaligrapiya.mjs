@@ -282,8 +282,7 @@ export function iguhitAngKaligrapiya(baybay, kambas, paraan = {}) {
       p5.fill(192);
       p5.textAlign(p5.RIGHT, p5.BOTTOM);
       p5.textSize(16);
-      p5.text(salin.ginawaGamit(), p5.width - 4, p5.height - 24);
-      p5.text(marka, p5.width - 4, p5.height - 4);
+      p5.text(salin.ginawaGamit(), p5.width - 4, p5.height - 4);
       p5.pop();
       p5.noLoop();
 

@@ -12,7 +12,7 @@ const tl = {
 };
 
 const en = {
-  pakilala: () => "Baybayin transliterator & calligraphy generator 🖌️",
+  pakilala: () => "Baybayin translator (transliterator) & calligraphy image generator 🖌️",
   tagalogNaSalita: () => "Tagalog word",
   tagalogBukodAngRa: () => "Tagalog (Distinct 'd' and 'r')",
   inglesNaSalitaEksperimental: () => "English word (experimental)",

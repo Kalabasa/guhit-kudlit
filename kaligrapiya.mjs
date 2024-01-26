@@ -79,6 +79,67 @@ function timpla(a, b, t) {
   return a + (b - a) * t;
 }
 
+const mgaParaan = [
+  guhitTalon,
+  guhitAlon,
+  guhitIlog,
+  guhitUlap,
+  guhitBundok,
+  guhitTuwid,
+  guhitSaWa,
+];
+
+export function lchToLab ([l, c, h]) {
+  return [
+    l, // L is still L
+    c * Math.cos((h * Math.PI) / 180), // a
+    c * Math.sin((h * Math.PI) / 180), // b
+  ];
+}
+function clamp(val, max, min = 0) {
+  return Math.min(Math.max(val, min), max);
+}
+export function clampRgb(rgb) {
+  return rgb.map((ch) => clamp(ch, 255));
+}
+function labToRgb (lab) {
+  return clampRgb(lrgbToRgb(xyz50toLrgb(toXyz50(lab))));
+}
+const κ = 24389 / 27; // 29^3/3^3
+const ε = 216 / 24389; // 6^3/29^3
+const white = [0.96422, 1.0, 0.82521]; // D50 reference white
+function toXyz50([l, a, b]) {
+  // compute f, starting with the luminance-related term
+  const f1 = (l + 16) / 116;
+  const f0 = a / 500 + f1;
+  const f2 = f1 - b / 200;
+
+  // compute xyz
+  const xyz = [
+    Math.pow(f0, 3) > ε ? Math.pow(f0, 3) : (116 * f0 - 16) / κ,
+    l > κ * ε ? Math.pow((l + 16) / 116, 3) : l / κ,
+    Math.pow(f2, 3) > ε ? Math.pow(f2, 3) : (116 * f2 - 16) / κ,
+  ];
+
+  // Compute XYZ by scaling xyz by reference white
+  return xyz.map((val, i) => val * white[i]);
+}
+
+function xyz50toLrgb([x, y, z]) {
+  return [
+    3.1338561 * x + -1.6168667 * y + -0.4906146 * z,
+    -0.9787684 * x + 1.9161415 * y + 0.033454 * z,
+    0.0719453 * x + -0.2289914 * y + 1.4052427 * z,
+  ];
+}
+
+function lrgbToRgb(rgb) {
+  return rgb.map(
+    (val) =>
+      (val > 0.0031308 ? 1.055 * Math.pow(val, 1 / 2.4) - 0.055 : 12.92 * val) * 255
+  );
+}
+
 const DUGTONG = Symbol("dugtong");
 const PUTOL = Symbol("putol");
 
@@ -373,18 +434,23 @@ export function iguhitAngKaligrapiya(baybay, kambas, paraan = {}) {
               );
 
           if (latag[0] === DUGTONG || latag[1] === DUGTONG) {
-            latag[0] = pilaNgPunto[pilaNgPunto.length - 2];
-            latag[1] = pilaNgPunto[pilaNgPunto.length - 1];
+            latag[0] = pilaNgPunto[pilaNgPunto.length - 2].value;
+            latag[1] = pilaNgPunto[pilaNgPunto.length - 1].value;
             if (latag[0] === PUTOL || latag[1] === PUTOL) throw new Error("Maling pagtala ng titik: " + titik);
           }
 
-          pilaNgPunto.push(...paraangPagguhit(...latag));
+          pilaNgPunto.push(...paraangPagguhit(...latag).map(value => ({ value, color: colorOf(paraangPagguhit) })));
 
-          if (putol) pilaNgPunto.push(PUTOL, PUTOL);
+          if (putol) pilaNgPunto.push({ value: PUTOL }, { value: PUTOL });
 
           function ilatag(x, y, p, i) {
             if (p === DUGTONG) return p;
             return (i % 2) === 0 ? x + p * lapadNgTitik : y + p * tangkadNgTitik;
+          }
+
+          function colorOf(f) {
+            const rgb = labToRgb(lchToLab([15 + 35 * (mgaParaan.indexOf(f) % 3), 100, 360 * mgaParaan.indexOf(f) / mgaParaan.length]));
+            return '#' + rgb.map(c => Math.round(c).toString(16).padStart(2, '0')).join('');
           }
         }
 
@@ -394,12 +460,14 @@ export function iguhitAngKaligrapiya(baybay, kambas, paraan = {}) {
         ihanay(pilaNgPunto, titikX, titikX + lapadNgTitik);
 
         ikailangTitik++;
+        console.log(pilaNgPunto);
       }
 
-      const punto = { x: pilaNgPunto[0], y: pilaNgPunto[1] };
+      const punto = { x: pilaNgPunto[0].value, y: pilaNgPunto[1].value };
+      const kulay = pilaNgPunto[0].color;
       const kasunodNaPunto =
         pilaNgPunto.length > 2
-          ? { x: pilaNgPunto[2], y: pilaNgPunto[3] }
+          ? { x: pilaNgPunto[2].value, y: pilaNgPunto[3].value }
           : null;
       if (!hulingPunto) hulingPunto = punto;
 
@@ -464,6 +532,7 @@ export function iguhitAngKaligrapiya(baybay, kambas, paraan = {}) {
           ? Math.max(0, Math.min(1, diin - 0.008 - Math.max(0, 0.8 - diin) * 0.1))
           : Math.max(1e-6, timpla(diin, tangkangDiin(), 0.1));
 
+      if (kulay) p5.stroke(kulay);
       ipinta(
         dulo.x - hagibis.x, dulo.y - hagibis.y,
         dulo.x, dulo.y,
@@ -519,7 +588,6 @@ function gumawaNgMgaHibla() {
 
 function ipinta(x0, y0, x1, y1, k0, k1) {
   p5.noFill();
-  p5.stroke(0);
   const anggulo = istilo.angguloNgPinsel(x1 - x0, y1 - y0);
   const kapal = timpla(k0, k1, 0.5);
   for (const hibla of mgaHibla) {
@@ -538,11 +606,11 @@ function ipinta(x0, y0, x1, y1, k0, k1) {
 
 function pilterin(mgaPunto, gitna, pilter) {
   for (let i = 0; i < mgaPunto.length; i += 2) {
-    let punto = { x: mgaPunto[i], y: mgaPunto[i + 1] };
+    let punto = { x: mgaPunto[i].value, y: mgaPunto[i + 1].value };
     if (punto.x === PUTOL || punto.y === PUTOL) continue;
     punto = pilter(punto, gitna);
-    mgaPunto[i] = punto.x;
-    mgaPunto[i + 1] = punto.y;
+    mgaPunto[i].value = punto.x;
+    mgaPunto[i + 1].value = punto.y;
   }
 }
 
@@ -573,11 +641,11 @@ function ihanay(mgaPunto, kaliwaX, kananX) {
   usogKananY = Math.max(usogKananY, usogKaliwaY - tangkadNgTitik * hilis);
 
   for (let i = 0; i < mgaPunto.length; i += 2) {
-    const x = mgaPunto[i];
-    const y = mgaPunto[i + 1];
+    const x = mgaPunto[i].value;
+    const y = mgaPunto[i + 1].value;
     if (x === PUTOL || y === PUTOL) continue;
     const hilis = Math.max(0, Math.min(1, (x - kaliwaX) / (kananX - kaliwaX)));
-    mgaPunto[i + 1] += timpla(usogKaliwaY, usogKananY, hilis);
+    mgaPunto[i + 1].value += timpla(usogKaliwaY, usogKananY, hilis);
   }
 }
 
@@ -593,8 +661,8 @@ function kudlitan(titik) {
   let ilalimY = -Infinity;
   let ibabawY = Infinity;
   for (let i = 0; i < pilaNgPunto.length; i += 2) {
-    const x = pilaNgPunto[i];
-    const y = pilaNgPunto[i + 1];
+    const x = pilaNgPunto[i].value;
+    const y = pilaNgPunto[i + 1].value;
     if (x === PUTOL || y === PUTOL) continue;
     if (x > kananX) kananX = x;
     if (x < kaliwaX) kaliwaX = x;
@@ -644,8 +712,8 @@ function kudlitan(titik) {
         kudlitX - lapadNgTitik * 0.04, kudlitY,
         kudlitX + lapadNgTitik * 0.04, kudlitY - tangkadNgTitik * 0.05,
         lapadNgTitik * 0.03, tangkadNgTitik * 0.03
-      ),
-      PUTOL, PUTOL
+      ).map(value => ({ value, color: '#000000' })),
+      {value:PUTOL}, {value:PUTOL}
     );
   } else if (patinig === "u") {
     let kudlitX = kananX;
@@ -678,8 +746,8 @@ function kudlitan(titik) {
         kudlitX - lapadNgTitik * 0.04, kudlitY + tangkadNgTitik * 0.05,
         kudlitX + lapadNgTitik * 0.04, kudlitY,
         -lapadNgTitik * 0.02, -tangkadNgTitik * 0.02
-      ),
-      PUTOL, PUTOL
+      ).map(value => ({ value, color: '#000000' })),
+      {value:PUTOL}, {value:PUTOL}
     );
   } else if (!patinig) { // pamudpod
     let sabit = null;
@@ -701,8 +769,8 @@ function kudlitan(titik) {
         kudlitX + lapadNgTitik * 0.3, kudlitY - tangkadNgTitik * 0.05,
         kudlitX, kudlitY + tangkadNgTitik * 0.25,
         lapadNgTitik * 0.05, tangkadNgTitik * 0.05
-      ),
-      PUTOL, PUTOL
+      ).map(value => ({ value, color: '#000000' })),
+      {value:PUTOL}, {value:PUTOL}
     );
   }
 }
@@ -711,7 +779,7 @@ function* sundin(mgaPunto, hakbang) {
   let dulo = null;
   let pila = [...mgaPunto];
   while (pila.length > 0) {
-    const punto = { x: pila[0], y: pila[1] };
+    const punto = { x: pila[0].value, y: pila[1].value };
 
     if (punto.x === PUTOL || punto.y === PUTOL) {
       dulo = null;

@@ -220,8 +220,8 @@ const mgaIstilo = {
     lapadNgGuhit: 0.18,
     tindiNgPaglampas: 1.1,
     hugisNgPinsel: 0.7,
-    bilangNgHibla: 1,
-    kapalNgHibla: (hibla, k) => k * 0.2,
+    bilangNgHibla: 160,
+    kapalNgHibla: (hibla, k) => k * 0.04,
     angguloNgPinsel: (x, y) => Math.PI * 0.75 + (x + y) * (x - y) / (malapit * 8),
     layoNgKudlit: 1.1,
     talsik: 0.95,
@@ -509,8 +509,8 @@ function gumawaNgMgaHibla() {
     const a = Math.PI * 2 * Math.random();
     const l = Math.sqrt(Math.random());
     mgaHibla.push({
-      x: Math.cos(a) * l,
-      y: Math.sin(a) * l,
+      x: Math.cos(a) * l * (1 + istilo.hugisNgPinsel),
+      y: Math.sin(a) * l * (1 - istilo.hugisNgPinsel),
       r: Math.random(),
     });
   }
